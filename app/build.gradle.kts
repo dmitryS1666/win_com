@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.androidx.media3.common.ktx)
     implementation("com.google.code.gson:gson:2.10.1")
     implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.room.runtime.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
