@@ -25,9 +25,6 @@ import win.com.data.entity.TeamEntity
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun eventDao(): EventDao
-    abstract fun participantDao(): ParticipantDao
-    abstract fun teamDao(): TeamDao
-    abstract fun resultDao(): ResultDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
@@ -37,7 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "esports_database"
+                    "esports_db"
                 ).build()
                 INSTANCE = instance
                 instance

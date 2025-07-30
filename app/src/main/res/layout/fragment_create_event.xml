@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#0B0F2A">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:elevation="4dp">
+
+        <TextView
+            android:text="Create New Event"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+
+        <EditText
+            android:id="@+id/eventNameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Event Name"
+            android:maxLength="25"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/white"
+            android:inputType="text"
+            tools:ignore="HardcodedText" />
+
+        <EditText
+            android:id="@+id/eventDateInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date (dd/mm/yyyy)"
+            android:focusable="false"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            tools:ignore="HardcodedText" />
+
+        <EditText
+            android:id="@+id/eventTimeInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Time (HH:mm)"
+            android:focusable="false"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"/>
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
+        <Spinner
+            android:id="@+id/modeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:id="@+id/roundsInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Rounds / Laps"
+            android:inputType="number"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:id="@+id/maxParticipantsInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Max Participants"
+            android:inputType="number"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"/>
+
+        <CheckBox
+            android:id="@+id/privateCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Private Event"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/createButton"
+            android:text="✅ Create Event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/resetButton"
+            android:text="Reset Form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</ScrollView>

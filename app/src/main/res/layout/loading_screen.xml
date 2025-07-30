@@ -40,7 +40,7 @@
         android:layout_marginTop="16dp"
         android:text="LOADING..."
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="34sp"
         android:letterSpacing="0.15"
         app:layout_constraintTop_toBottomOf="@id/loadingCircle"
         app:layout_constraintStart_toStartOf="parent"

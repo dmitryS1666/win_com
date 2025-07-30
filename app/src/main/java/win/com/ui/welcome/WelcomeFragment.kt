@@ -10,6 +10,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import win.com.MainActivity
 import win.com.R
+import win.com.ui.dashboard.DashboardFragment
 
 class WelcomeFragment : Fragment() {
 
@@ -32,7 +33,7 @@ class WelcomeFragment : Fragment() {
                 .putBoolean("hasStarted", true)
                 .apply()
 
-            (activity as? MainActivity)?.openMainFragment()
+            (activity as? MainActivity)?.openDashboardFragment()
         }
     }
 }

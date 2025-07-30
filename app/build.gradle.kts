@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -42,7 +44,7 @@ android {
         viewBinding = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.12"
     }
     packaging {
         resources {
@@ -52,7 +54,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -65,6 +66,8 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.cardview)
+    implementation(libs.material)
+    kapt("androidx.room:room-compiler:2.7.2")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.github.bumptech.glide:glide:4.15.1")
@@ -72,6 +75,15 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.androidx.room.runtime.android)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.filament.android)
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.compose:compose-bom:2024.05.00")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

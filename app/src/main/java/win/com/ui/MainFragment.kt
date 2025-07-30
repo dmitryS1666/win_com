@@ -10,6 +10,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import win.com.MainActivity
 import win.com.R
+import win.com.ui.dashboard.DashboardFragment
 
 class MainFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
@@ -31,9 +32,9 @@ class MainFragment : Fragment() {
         startButton.setOnClickListener {
             if (isFirstLaunch) {
                 // Перенаправить на экран ввода параметров
-                (activity as? MainActivity)?.hideBottomNav()
-                (activity as? MainActivity)?.openFragment(ParamFragment())
-                (activity as? MainActivity)?.updateNavIcons("param")
+//                (activity as? MainActivity)?.hideBottomNav()
+                (activity as? MainActivity)?.openFragment(DashboardFragment())
+                (activity as? MainActivity)?.updateNavIcons("dashboard")
 
                 sharedPreferences.edit()
                     .putBoolean("isFirstLaunch", false)
