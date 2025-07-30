@@ -15,30 +15,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import win.com.ui.EditPlanDialogFragment
 import win.com.ui.LoadingFragment
-import win.com.ui.MainFragment
-import win.com.ui.ParamFragment
-import win.com.ui.PlanFragment
 import win.com.ui.SettingsFragment
-import win.com.ui.StatsFragment
 import win.com.ui.welcome.WelcomeFragment
 import win.com.ui.WorkoutFragment
 import win.com.ui.WorkoutPlanConstants
+import win.com.ui.dashboard.DashboardFragment
+import win.com.ui.event.CreateEventFragment
 import win.com.ui.theme.WinComTheme
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNav: View
-    private lateinit var navParams: LinearLayout
-    private lateinit var navPlan: LinearLayout
-    private lateinit var navRun: LinearLayout
-    private lateinit var navStat: LinearLayout
+    private lateinit var navDashBoard: LinearLayout
+    private lateinit var navEvent: LinearLayout
+    private lateinit var navTeams: LinearLayout
     private lateinit var navSet: LinearLayout
 
-    private lateinit var planIcon: ImageView
-    private lateinit var runIcon: ImageView
-    private lateinit var statIcon: ImageView
+    private lateinit var dashboardIcon: ImageView
+    private lateinit var eventIcon: ImageView
+    private lateinit var teamsIcon: ImageView
     private lateinit var setIcon: ImageView
 
     @SuppressLint("CutPasteId")
@@ -68,40 +64,32 @@ class MainActivity : AppCompatActivity() {
         hideSystemUI()
 
         // Инициализация элементов навигации
-        navParams = findViewById(R.id.navParams)
-        navPlan = findViewById(R.id.navPlan)
-        navRun = findViewById(R.id.navRun)
-        navStat = findViewById(R.id.navStat)
+        navDashBoard = findViewById(R.id.navDashBoard)
+        navEvent = findViewById(R.id.navEvent)
+        navTeams = findViewById(R.id.navTeams)
         navSet = findViewById(R.id.navSet)
 
         // Инициализация иконок
-        planIcon = navPlan.findViewById(R.id.iconPlan)
-        runIcon = navRun.findViewById(R.id.iconRun)
-        statIcon = navStat.findViewById(R.id.iconStat)
+        eventIcon = navEvent.findViewById(R.id.iconEvent)
+        teamsIcon = navTeams.findViewById(R.id.iconTeams)
         setIcon = navSet.findViewById(R.id.iconSet)
 
         // Обработчики кликов для каждого элемента нижней панели
-        navParams.setOnClickListener {
+        navDashBoard.setOnClickListener {
             hideBottomNav()
-            openFragment(ParamFragment())
+            openFragment(DashboardFragment())
         }
 
-        navPlan.setOnClickListener {
+        navEvent.setOnClickListener {
             showBottomNav()
-            openFragment(PlanFragment())
-            updateNavIcons("plan")
+            openFragment(CreateEventFragment())
+            updateNavIcons("event")
         }
 
-        navRun.setOnClickListener {
+        navTeams.setOnClickListener {
             showBottomNav()
             openFragment(WorkoutFragment())
-            updateNavIcons("run")
-        }
-
-        navStat.setOnClickListener {
-            showBottomNav()
-            openFragment(StatsFragment())
-            updateNavIcons("stat")
+            updateNavIcons("teams")
         }
 
         navSet.setOnClickListener {
@@ -116,14 +104,14 @@ class MainActivity : AppCompatActivity() {
         resetNavIcons()
 
         when (activeFragment) {
-            "plan" -> {
-                planIcon.setImageResource(R.drawable.plan_active)
+            "dashboard" -> {
+                dashboardIcon.setImageResource(R.drawable.icon_dashboard_active)
             }
-            "run" -> {
-                runIcon.setImageResource(R.drawable.start_active)
+            "event" -> {
+                eventIcon.setImageResource(R.drawable.icon_event_active)
             }
-            "stat" -> {
-                statIcon.setImageResource(R.drawable.statistic_active)
+            "teams" -> {
+                teamsIcon.setImageResource(R.drawable.icon_team_active)
             }
             "set" -> {
                 setIcon.setImageResource(R.drawable.settings_acitve)
@@ -133,9 +121,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun resetNavIcons() {
         // Сбросить все иконки
-        planIcon.setImageResource(R.drawable.plan)
-        runIcon.setImageResource(R.drawable.start)
-        statIcon.setImageResource(R.drawable.statistic)
+        dashboardIcon.setImageResource(R.drawable.icon_dashboard)
+        eventIcon.setImageResource(R.drawable.icon_event)
+        teamsIcon.setImageResource(R.drawable.icon_team)
         setIcon.setImageResource(R.drawable.settings)
     }
 
@@ -178,17 +166,26 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    fun openDashboardFragment() {
+        showBottomNav()
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.mainFragmentContainer, DashboardFragment())
+            .commit()
+    }
+
     fun openMainFragment() {
         val sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE)
         val isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch", true)
 
         hideBottomNav()
 
-        val fragment = if (isFirstLaunch) {
-            WelcomeFragment()
-        } else {
-            MainFragment()
-        }
+        val fragment = WelcomeFragment()
+//        if (isFirstLaunch) {
+//            WelcomeFragment()
+//        } else {
+//            DashboardFragment()
+//        }
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragmentContainer, fragment)
@@ -212,22 +209,11 @@ class MainActivity : AppCompatActivity() {
 
         val currentFragment = supportFragmentManager.findFragmentById(R.id.mainFragmentContainer)
 
-        if (currentFragment is MainFragment || currentFragment is ParamFragment) {
+        if (currentFragment is WelcomeFragment) {
             hideBottomNav()
         } else {
             showBottomNav()
         }
-    }
-
-    private fun showEditPlanDialog() {
-        val dialog = EditPlanDialogFragment()
-        dialog.listener = object : EditPlanDialogFragment.OnPlanEditedListener {
-            override fun onPlanEdited(level: String, date: String, sets: List<Int>, restTime: String) {
-                // TODO: Добавь сюда логику по обновлению UI, таблицы и т.п.
-                Toast.makeText(this@MainActivity, "Plan updated: $level, $date, $sets, $restTime", Toast.LENGTH_SHORT).show()
-            }
-        }
-        dialog.show(supportFragmentManager, "EditPlanDialog")
     }
 
     override fun onStop() {

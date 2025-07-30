@@ -10,6 +10,7 @@ import win.com.data.entity.EventEntity
 
 @Dao
 interface EventDao {
+
     @Query("SELECT * FROM events ORDER BY date DESC, time DESC")
     fun getAllEvents(): Flow<List<EventEntity>>
 
@@ -21,4 +22,7 @@ interface EventDao {
 
     @Delete
     suspend fun delete(event: EventEntity)
+
+    @Query("SELECT * FROM events WHERE id = :eventId LIMIT 1")
+    suspend fun getById(eventId: Long): EventEntity?
 }

@@ -79,19 +79,19 @@ class SplashActivity : AppCompatActivity() {
         Thread {
             val isConnected = checkInternetAccess()
             runOnUiThread {
-                if (isConnected) {
-                    for ((key, value) in prefs.all) {
-                        Log.d("RESPONSE", "$key: $value")
-                    }
-                    val cached = prefs.getString("banner_json", null)
-                    if (cached != null) {
-                        handleBanner(JSONObject(cached))
-                    } else {
-                        fetchBanner()
-                    }
-                } else {
+//                if (isConnected) {
+//                    for ((key, value) in prefs.all) {
+//                        Log.d("RESPONSE", "$key: $value")
+//                    }
+//                    val cached = prefs.getString("banner_json", null)
+//                    if (cached != null) {
+//                        handleBanner(JSONObject(cached))
+//                    } else {
+//                        fetchBanner()
+//                    }
+//                } else {
                     goToMain()
-                }
+//                }
             }
         }.start()
     }
