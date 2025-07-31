@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -120,7 +121,7 @@ class CreateEventFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.createEvent(event) {
                     if (!isAdded) return@createEvent
-                    Toast.makeText(requireContext(), "Событие \"$name\" создано!", Toast.LENGTH_SHORT).show()
+                    showCustomToast(event.name)
                     (activity as? MainActivity)?.openFragment(AllEventsFragment())
                 }
             }
@@ -136,5 +137,25 @@ class CreateEventFragment : Fragment() {
             categorySpinner.setSelection(0)
             modeSpinner.setSelection(0)
         }
+    }
+
+    fun showCustomToast(name: String) {
+        val inflater = layoutInflater
+        val layout = inflater.inflate(R.layout.custom_toast, null)
+
+        val toastText = layout.findViewById<TextView>(R.id.toastText)
+        toastText.text = "Event \"$name\" created successfully!"
+
+        val toast = Toast(requireContext())
+        toast.duration = Toast.LENGTH_LONG
+        toast.view = layout
+
+        // Закрытие Toast по нажатию на крестик
+        val closeButton = layout.findViewById<ImageView>(R.id.closeButton)
+        closeButton.setOnClickListener {
+            toast.cancel()
+        }
+
+        toast.show()
     }
 }
