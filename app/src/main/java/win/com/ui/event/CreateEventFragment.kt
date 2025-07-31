@@ -12,10 +12,14 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import win.com.MainActivity
 import win.com.data.entity.EventEntity
 import win.com.util.GameCategories
@@ -41,12 +45,21 @@ class CreateEventFragment : Fragment() {
         val roundsInput = view.findViewById<EditText>(R.id.roundsInput)
         val maxParticipantsInput = view.findViewById<EditText>(R.id.maxParticipantsInput)
         val privateCheckbox = view.findViewById<CheckBox>(R.id.privateCheckbox)
+        val isPrivate = privateCheckbox.isChecked
 
         val createButton = view.findViewById<Button>(R.id.createButton)
-        val resetButton = view.findViewById<Button>(R.id.resetButton)
+        val resetButton = view.findViewById<TextView>(R.id.resetButton)
+        val backButton = view.findViewById<ImageView>(R.id.backButton)
 
-        categorySpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, GameCategories.list)
-//        modeSpinner.adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, GameModes.list)
+        backButton.setOnClickListener {
+            // Возврат назад
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        context?.let {
+            categorySpinner.adapter = ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, GameCategories.list)
+            modeSpinner.adapter = ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, GameModes.list)
+        }
 
         val calendar = Calendar.getInstance()
 
@@ -82,7 +95,6 @@ class CreateEventFragment : Fragment() {
             val mode = modeSpinner.selectedItem.toString()
             val rounds = roundsInput.text.toString().toIntOrNull() ?: 1
             val max = maxParticipantsInput.text.toString().toIntOrNull() ?: 20
-            val isPrivate = privateCheckbox.isChecked
 
             if (name.isBlank() || date.isBlank() || time.isBlank()) {
                 Toast.makeText(requireContext(), "Fill all required fields!", Toast.LENGTH_SHORT).show()
@@ -100,9 +112,12 @@ class CreateEventFragment : Fragment() {
                 isPrivate = isPrivate
             )
 
-            viewModel.createEvent(event) {
-                Toast.makeText(requireContext(), "Event \"$name\" created successfully!", Toast.LENGTH_SHORT).show()
-                (activity as? MainActivity)?.openMainFragment()
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.createEvent(event) {
+                    if (!isAdded) return@createEvent
+                    Toast.makeText(requireContext(), "Событие \"$name\" создано!", Toast.LENGTH_SHORT).show()
+                    (activity as? MainActivity)?.openFragment(AllEventsFragment())
+                }
             }
         }
 

@@ -1,114 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#0B0F2A">
+    android:background="#0B0F2A"
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:elevation="4dp">
+        android:orientation="vertical">
 
+        <!-- Заголовок -->
         <TextView
-            android:text="Create New Event"
-            android:textSize="20sp"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:layout_marginBottom="20dp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:ignore="HardcodedText" />
+            android:text="Create New Event"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="5dp" />
 
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_marginBottom="5dp"/>
+
+        <!-- Название (label + input) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event Name"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Обычный EditText с закруглённым фоном -->
         <EditText
             android:id="@+id/eventNameInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Event Name"
-            android:maxLength="25"
-            android:backgroundTint="@color/white"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_input_bg"
+            android:padding="12dp"
             android:textColor="@android:color/white"
-            android:inputType="text"
-            tools:ignore="HardcodedText" />
+            android:textColorHint="#9CA3AF"
+            android:hint="Enter event name"
+            android:textSize="14sp"
+            android:inputType="text" />
+
+        <!-- Date -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp" />
 
         <EditText
             android:id="@+id/eventDateInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Date (dd/mm/yyyy)"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_input_bg"
+            android:padding="12dp"
             android:focusable="false"
-            android:backgroundTint="@color/white"
+            android:hint="Select Date"
             android:textColor="@android:color/white"
-            android:layout_marginTop="8dp"
-            tools:ignore="HardcodedText" />
+            android:textColorHint="#9CA3AF"
+            android:textSize="14sp" />
+
+        <!-- Time Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp" />
 
         <EditText
             android:id="@+id/eventTimeInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Time (HH:mm)"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_input_bg"
+            android:padding="12dp"
             android:focusable="false"
-            android:backgroundTint="@color/white"
+            android:hint="Select Time"
             android:textColor="@android:color/white"
-            android:layout_marginTop="8dp"/>
+            android:textColorHint="#9CA3AF"
+            android:textSize="14sp" />
+
+        <!-- Category Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Game Category"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp" />
 
         <Spinner
             android:id="@+id/categorySpinner"
             android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_input_bg"
+            android:padding="8dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="#1A2239" />
+
+        <!-- Mode Label -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:text="Mode"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp" />
 
         <Spinner
             android:id="@+id/modeSpinner"
             android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_input_bg"
+            android:padding="8dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="#1A2239" />
+
+        <!-- Rounds Label -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:text="Rounds"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp" />
 
         <EditText
             android:id="@+id/roundsInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Rounds / Laps"
-            android:inputType="number"
-            android:backgroundTint="@color/white"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_input_bg"
+            android:padding="12dp"
+            android:hint="Enter rounds"
             android:textColor="@android:color/white"
-            android:layout_marginTop="8dp"/>
+            android:textColorHint="#9CA3AF"
+            android:inputType="number"
+            android:textSize="14sp" />
+
+        <!-- Max Participants Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Max Participants"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp" />
 
         <EditText
             android:id="@+id/maxParticipantsInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Max Participants"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_input_bg"
+            android:padding="12dp"
+            android:hint="Enter max participants"
+            android:textColor="@android:color/white"
+            android:textColorHint="#9CA3AF"
             android:inputType="number"
-            android:backgroundTint="@color/white"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="8dp"/>
+            android:textSize="14sp" />
 
-        <CheckBox
-            android:id="@+id/privateCheckbox"
-            android:layout_width="wrap_content"
+        <!-- Private Event -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Private Event"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="8dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Private Event"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/privateCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                app:thumbTint="@color/white"
+                app:trackTint="#3890F5" />
+        </LinearLayout>
+
+        <!-- Кнопка создания -->
         <Button
             android:id="@+id/createButton"
-            android:text="✅ Create Event"
+            android:layout_marginTop="24dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:text="Create Event"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_button_bg" />
 
-        <Button
+        <!-- Сброс -->
+        <TextView
             android:id="@+id/resetButton"
-            android:text="Reset Form"
-            android:layout_width="match_parent"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Reset Form"
             android:textColor="@android:color/holo_red_dark"
-            android:layout_marginTop="8dp"/>
+            android:textSize="16sp"
+            android:layout_gravity="center"/>
     </LinearLayout>
 </ScrollView>
