@@ -108,7 +108,7 @@
             android:id="@+id/categorySpinner"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@drawable/rounded_input_bg"
+            android:background="@drawable/spinner_background"
             android:padding="8dp"
             android:spinnerMode="dropdown"
             android:popupBackground="#1A2239" />
@@ -127,7 +127,7 @@
             android:id="@+id/modeSpinner"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@drawable/rounded_input_bg"
+            android:background="@drawable/spinner_background"
             android:padding="8dp"
             android:spinnerMode="dropdown"
             android:popupBackground="#1A2239" />

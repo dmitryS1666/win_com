@@ -56,9 +56,14 @@ class CreateEventFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        context?.let {
-            categorySpinner.adapter = ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, GameCategories.list)
-            modeSpinner.adapter = ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, GameModes.list)
+        context?.let { ctx ->
+            val categoryAdapter = ArrayAdapter(ctx, R.layout.spinner_item, GameCategories.list)
+            categoryAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+            categorySpinner.adapter = categoryAdapter
+
+            val modeAdapter = ArrayAdapter(ctx, R.layout.spinner_item, GameModes.list)
+            modeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+            modeSpinner.adapter = modeAdapter
         }
 
         val calendar = Calendar.getInstance()
