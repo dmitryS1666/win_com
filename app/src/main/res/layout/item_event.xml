@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:backgroundTint="#1A2239"
+    app:cardCornerRadius="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Race Cup"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/itemDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📅 01/08/2025"
+            android:textColor="#CCCCCC"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/itemMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drone • Time Trial"
+            android:textColor="#BBBBBB"
+            android:layout_marginTop="2dp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

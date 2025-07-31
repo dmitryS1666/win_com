@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import win.com.MainActivity
 import win.com.R
+import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
 
 class DashboardFragment : Fragment() {
@@ -66,10 +67,12 @@ class DashboardFragment : Fragment() {
         // Кнопки
         view.findViewById<FrameLayout>(R.id.actionCreate).setOnClickListener {
             (activity as? MainActivity)?.openFragment(CreateEventFragment())
+            (activity as? MainActivity)?.updateNavIcons("events")
         }
 
         view.findViewById<FrameLayout>(R.id.actionEvents).setOnClickListener {
-            // TODO: открыть MyEventsFragment
+            (activity as? MainActivity)?.openFragment(AllEventsFragment())
+            (activity as? MainActivity)?.updateNavIcons("events")
         }
 
         view.findViewById<FrameLayout>(R.id.actionTeams).setOnClickListener {

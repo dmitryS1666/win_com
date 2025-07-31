@@ -14,6 +14,9 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
     val lastEvent: LiveData<EventEntity?>
 
+    val allEvents: LiveData<List<EventEntity>>
+        get() = this.repository.getAllEvents().asLiveData()
+
     init {
         val dao = AppDatabase.getDatabase(application).eventDao()
         repository = EventRepository(dao)

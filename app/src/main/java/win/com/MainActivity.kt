@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         val locale = Locale("en")
         Locale.setDefault(locale)
 
-        setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             val skipLoading = intent.getBooleanExtra("skip_loading", false)
             if (!skipLoading) {
@@ -70,20 +69,22 @@ class MainActivity : AppCompatActivity() {
         navSet = findViewById(R.id.navSet)
 
         // Инициализация иконок
+        dashboardIcon = navDashBoard.findViewById(R.id.iconDashboard)
         eventIcon = navEvent.findViewById(R.id.iconEvent)
         teamsIcon = navTeams.findViewById(R.id.iconTeams)
         setIcon = navSet.findViewById(R.id.iconSet)
 
         // Обработчики кликов для каждого элемента нижней панели
         navDashBoard.setOnClickListener {
-            hideBottomNav()
+            showBottomNav()
             openFragment(DashboardFragment())
+            updateNavIcons("dashboard")
         }
 
         navEvent.setOnClickListener {
             showBottomNav()
             openFragment(CreateEventFragment())
-            updateNavIcons("event")
+            updateNavIcons("events")
         }
 
         navTeams.setOnClickListener {
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             "dashboard" -> {
                 dashboardIcon.setImageResource(R.drawable.icon_dashboard_active)
             }
-            "event" -> {
+            "events" -> {
                 eventIcon.setImageResource(R.drawable.icon_event_active)
             }
             "teams" -> {
@@ -167,11 +168,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openDashboardFragment() {
+        if (isFinishing || isDestroyed) return
+
         showBottomNav()
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragmentContainer, DashboardFragment())
             .commit()
+
+        window.decorView.post {
+            if (!isFinishing && !isDestroyed) {
+                updateNavIcons("dashboard")
+            }
+        }
     }
 
     fun openMainFragment() {
