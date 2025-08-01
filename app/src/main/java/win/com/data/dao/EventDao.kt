@@ -1,5 +1,6 @@
 package win.com.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -20,9 +21,9 @@ interface EventDao {
     @Update
     suspend fun update(event: EventEntity)
 
-    @Delete
-    suspend fun delete(event: EventEntity)
+    @Query("DELETE FROM events WHERE id = :eventId")
+    suspend fun delete(eventId: Int)
 
     @Query("SELECT * FROM events WHERE id = :eventId LIMIT 1")
-    suspend fun getById(eventId: Long): EventEntity?
+    fun getById(eventId: Int): LiveData<EventEntity>
 }

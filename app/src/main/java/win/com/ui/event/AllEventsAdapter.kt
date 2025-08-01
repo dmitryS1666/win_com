@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import win.com.R
 import win.com.data.entity.EventEntity
 
-class AllEventsAdapter : ListAdapter<EventEntity, AllEventsAdapter.EventViewHolder>(
+class AllEventsAdapter(
+    private val onViewClick: (EventEntity) -> Unit,
+    private val onDeleteClick: (EventEntity) -> Unit
+) : ListAdapter<EventEntity, AllEventsAdapter.EventViewHolder>(
     object : DiffUtil.ItemCallback<EventEntity>() {
         override fun areItemsTheSame(oldItem: EventEntity, newItem: EventEntity) =
             oldItem.id == newItem.id
@@ -45,11 +48,11 @@ class AllEventsAdapter : ListAdapter<EventEntity, AllEventsAdapter.EventViewHold
         holder.players.text = "${event.maxParticipants}"
 
         holder.iconView.setOnClickListener {
-            // TODO: открыть подробности события
+            onViewClick(event)
         }
 
         holder.iconDelete.setOnClickListener {
-            // TODO: удалить событие
+            onDeleteClick(event)
         }
     }
 }

@@ -1,5 +1,6 @@
 package win.com.data.repository
 
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import win.com.data.dao.EventDao
 import win.com.data.entity.EventEntity
@@ -12,7 +13,7 @@ class EventRepository(private val dao: EventDao) {
 
     suspend fun update(event: EventEntity) = dao.update(event)
 
-    suspend fun delete(event: EventEntity) = dao.delete(event)
+    suspend fun delete(id: Int) = dao.delete(id)
 
-    suspend fun getById(id: Long): EventEntity? = dao.getById(id)
+    fun getById(id: Int): LiveData<EventEntity> = dao.getById(id)
 }

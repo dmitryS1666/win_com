@@ -8,7 +8,7 @@ object MusicPlayerManager {
 
     fun start(context: Context) {
         val prefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-        val enabled = prefs.getBoolean("sound_enabled", true)
+        val enabled = prefs.getBoolean("sound_enabled", false)
 
         if (!enabled) return
 
