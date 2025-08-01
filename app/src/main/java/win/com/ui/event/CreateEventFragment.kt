@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import win.com.MainActivity
 import win.com.data.entity.EventEntity
+import win.com.ui.dashboard.DashboardFragment
 import win.com.util.GameCategories
 import win.com.util.GameModes
 import win.com.viewmodel.CreateEventViewModel
@@ -52,9 +53,9 @@ class CreateEventFragment : Fragment() {
         val resetButton = view.findViewById<TextView>(R.id.resetButton)
         val backButton = view.findViewById<ImageView>(R.id.backButton)
 
+        // Возврат назад
         backButton.setOnClickListener {
-            // Возврат назад
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+            parentFragmentManager.popBackStack()
         }
 
         context?.let { ctx ->

@@ -20,6 +20,7 @@ import win.com.ui.welcome.WelcomeFragment
 import win.com.ui.WorkoutFragment
 import win.com.ui.WorkoutPlanConstants
 import win.com.ui.dashboard.DashboardFragment
+import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
 import win.com.ui.theme.WinComTheme
 import java.util.Locale
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
         navEvent.setOnClickListener {
             showBottomNav()
-            openFragment(CreateEventFragment())
+            openFragment(AllEventsFragment())
             updateNavIcons("events")
         }
 
@@ -96,6 +97,20 @@ class MainActivity : AppCompatActivity() {
             showBottomNav()
             openFragment(SettingsFragment())
             updateNavIcons("set")
+        }
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            val fragment = supportFragmentManager.findFragmentById(R.id.mainFragmentContainer)
+
+            when (fragment) {
+                is DashboardFragment -> updateNavIcons("dashboard")
+                is AllEventsFragment -> updateNavIcons("events")
+                is WorkoutFragment -> updateNavIcons("teams")
+                is SettingsFragment -> updateNavIcons("set")
+                else -> {
+                    // Можно сбросить иконки или скрыть навигацию, если нужен кастом
+                }
+            }
         }
     }
 
@@ -132,6 +147,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragmentContainer, fragment)
+            .addToBackStack(null) // ← добавь это
             .commit()
     }
 

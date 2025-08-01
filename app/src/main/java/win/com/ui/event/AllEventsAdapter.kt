@@ -12,14 +12,22 @@ import win.com.data.entity.EventEntity
 
 class AllEventsAdapter : ListAdapter<EventEntity, AllEventsAdapter.EventViewHolder>(
     object : DiffUtil.ItemCallback<EventEntity>() {
-        override fun areItemsTheSame(oldItem: EventEntity, newItem: EventEntity) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: EventEntity, newItem: EventEntity) = oldItem == newItem
+        override fun areItemsTheSame(oldItem: EventEntity, newItem: EventEntity) =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: EventEntity, newItem: EventEntity) =
+            oldItem == newItem
     }
 ) {
     inner class EventViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.itemTitle)
         val date: TextView = view.findViewById(R.id.itemDate)
+        val time: TextView = view.findViewById(R.id.itemTime)
+        val category: TextView = view.findViewById(R.id.itemCategory)
         val mode: TextView = view.findViewById(R.id.itemMode)
+        val players: TextView = view.findViewById(R.id.itemPlayers)
+        val iconView: View = view.findViewById(R.id.iconView)
+        val iconDelete: View = view.findViewById(R.id.iconDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -30,7 +38,18 @@ class AllEventsAdapter : ListAdapter<EventEntity, AllEventsAdapter.EventViewHold
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.title.text = event.name
-        holder.date.text = "📅 ${event.date} ${event.time}"
-        holder.mode.text = "${event.category} • ${event.mode}"
+        holder.date.text = "${event.date}"
+        holder.time.text = "${event.time}"
+        holder.category.text = "${event.category}"
+        holder.mode.text = "${event.mode}"
+        holder.players.text = "${event.maxParticipants}"
+
+        holder.iconView.setOnClickListener {
+            // TODO: открыть подробности события
+        }
+
+        holder.iconDelete.setOnClickListener {
+            // TODO: удалить событие
+        }
     }
 }
