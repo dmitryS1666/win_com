@@ -1,5 +1,6 @@
 package win.com.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -14,11 +15,14 @@ interface TeamDao {
     fun getAllTeams(): Flow<List<TeamEntity>>
 
     @Insert
-    suspend fun insert(event: TeamEntity): Long
+    suspend fun insert(team: TeamEntity): Long
 
     @Update
-    suspend fun update(event: TeamEntity)
+    suspend fun update(team: TeamEntity)
 
     @Delete
-    suspend fun delete(event: TeamEntity)
+    suspend fun delete(team: TeamEntity)
+
+    @Query("SELECT * FROM teams WHERE id = :teamId LIMIT 1")
+    fun getById(teamId: Int): LiveData<TeamEntity>
 }

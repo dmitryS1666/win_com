@@ -1,12 +1,10 @@
 package win.com.data.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import win.com.data.entity.EventEntity
 import win.com.data.entity.ParticipantEntity
 
 @Dao
@@ -15,11 +13,11 @@ interface ParticipantDao {
     fun getAllParticipants(): Flow<List<ParticipantEntity>>
 
     @Insert
-    suspend fun insert(event: ParticipantEntity): Long
+    suspend fun insert(participant: ParticipantEntity): Long
 
     @Update
-    suspend fun update(event: ParticipantEntity)
+    suspend fun update(participant: ParticipantEntity)
 
-    @Delete
-    suspend fun delete(event: ParticipantEntity)
+    @Query("DELETE FROM events WHERE id = :participantId")
+    suspend fun delete(participantId: Int)
 }

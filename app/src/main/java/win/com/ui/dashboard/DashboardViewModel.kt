@@ -20,12 +20,13 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         get() = this.repository.getAllEvents().asLiveData()
 
     init {
-        val dao = AppDatabase.getDatabase(application).eventDao()
-        repository = EventRepository(dao)
+        val db = AppDatabase.getDatabase(application)
 
-        lastEvent = repository.getAllEvents()
-            .map { it.firstOrNull() }
-            .asLiveData()
+        val eventDao = db.eventDao()
+
+        repository = EventRepository(eventDao)
+
+        lastEvent = repository.getAllEvents().map { it.firstOrNull() }.asLiveData()
     }
 
     fun deleteEvent(id: Int) {

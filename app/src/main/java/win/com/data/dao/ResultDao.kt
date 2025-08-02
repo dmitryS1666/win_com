@@ -14,7 +14,7 @@ interface ResultDao {
     fun getAllResults(): Flow<List<ResultEntity>>
 
     @Insert
-    suspend fun insert(event: ResultEntity): Long
+    suspend fun insert(event: ResultEntity): Int
 
     @Update
     suspend fun update(event: ResultEntity)

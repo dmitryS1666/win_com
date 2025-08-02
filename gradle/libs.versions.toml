@@ -21,6 +21,7 @@ roomRuntimeAndroid = "2.7.2"
 viewpager2 = "1.1.0"
 filamentAndroid = "1.17.1"
 material = "1.12.0"
+lifecycleViewmodelAndroid = "2.9.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +50,7 @@ androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-
 androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 filament-android = { group = "com.google.ar.sceneform", name = "filament-android", version.ref = "filamentAndroid" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

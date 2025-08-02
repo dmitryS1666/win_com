@@ -22,6 +22,10 @@ import win.com.ui.WorkoutPlanConstants
 import win.com.ui.dashboard.DashboardFragment
 import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
+import win.com.ui.team.CreateTeamFragment
+import win.com.ui.team.EditTeamFragment
+import win.com.ui.team.TeamsManagerFragment
+import win.com.ui.team.ViewTeamFragment
 import win.com.ui.theme.WinComTheme
 import java.util.Locale
 
@@ -89,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
         navTeams.setOnClickListener {
             showBottomNav()
-            openFragment(WorkoutFragment())
+            openFragment(TeamsManagerFragment())
             updateNavIcons("teams")
         }
 
@@ -105,7 +109,11 @@ class MainActivity : AppCompatActivity() {
             when (fragment) {
                 is DashboardFragment -> updateNavIcons("dashboard")
                 is AllEventsFragment -> updateNavIcons("events")
-                is WorkoutFragment -> updateNavIcons("teams")
+                is CreateEventFragment -> updateNavIcons("events")
+                is TeamsManagerFragment -> updateNavIcons("teams")
+                is CreateTeamFragment -> updateNavIcons("teams")
+                is EditTeamFragment -> updateNavIcons("teams")
+                is ViewTeamFragment -> updateNavIcons("teams")
                 is SettingsFragment -> updateNavIcons("set")
                 else -> {
                     // Можно сбросить иконки или скрыть навигацию, если нужен кастом

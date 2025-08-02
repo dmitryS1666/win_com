@@ -3,8 +3,10 @@ package win.com.data.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "teams")
-data class TeamEntity(
+@Entity(tableName = "team_participants")
+data class TeamParticipantEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val name: String
+    val teamId: Long,
+    val name: String,
+    val role: String
 )

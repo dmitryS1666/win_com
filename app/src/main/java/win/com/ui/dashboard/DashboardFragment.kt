@@ -15,6 +15,7 @@ import win.com.MainActivity
 import win.com.R
 import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
+import win.com.ui.team.CreateTeamFragment
 
 class DashboardFragment : Fragment() {
 
@@ -76,7 +77,8 @@ class DashboardFragment : Fragment() {
         }
 
         view.findViewById<FrameLayout>(R.id.actionTeams).setOnClickListener {
-            // TODO: открыть TeamsFragment
+            (activity as? MainActivity)?.openFragment(CreateTeamFragment())
+            (activity as? MainActivity)?.updateNavIcons("teams")
         }
 
         view.findViewById<FrameLayout>(R.id.actionResults).setOnClickListener {

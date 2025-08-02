@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.cardview)
     implementation(libs.material)
+    implementation(libs.androidx.lifecycle.viewmodel.android)
     kapt("androidx.room:room-compiler:2.7.2")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")

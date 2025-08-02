@@ -5,9 +5,11 @@ import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import win.com.MainActivity
 import win.com.R
 import win.com.data.entity.EventEntity
 import win.com.ui.dashboard.DashboardViewModel
+import win.com.ui.team.TeamsManagerFragment
 import win.com.util.GameCategories
 import win.com.util.GameModes
 
@@ -39,16 +41,16 @@ class EditEventFragment : Fragment() {
         val backButton = view.findViewById<ImageView>(R.id.backButton)
 
         // Устанавливаем адаптеры для спиннеров с твоими списками
-        val categoryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, GameCategories.list)
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val categoryAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_white, GameCategories.list)
+        categoryAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_white)
         categorySpinner.adapter = categoryAdapter
 
-        val modeAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, GameModes.list)
-        modeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val modeAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_white, GameModes.list)
+        modeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_white)
         modeSpinner.adapter = modeAdapter
 
         backButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
         }
 
         if (eventId != -1) {
