@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,7 +72,8 @@ class CreateEventFragment : Fragment() {
         val calendar = Calendar.getInstance()
 
         dateInput.setOnClickListener {
-            DatePickerDialog(requireContext(),
+            val dialog = DatePickerDialog(
+                ContextThemeWrapper(requireContext(), R.style.CustomDatePickerDialogTheme),
                 { _, y, m, d ->
                     val date = String.format("%02d/%02d/%04d", d, m + 1, y)
                     dateInput.setText(date)
@@ -79,7 +81,8 @@ class CreateEventFragment : Fragment() {
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            )
+            dialog.show()
         }
 
         timeInput.setOnClickListener {

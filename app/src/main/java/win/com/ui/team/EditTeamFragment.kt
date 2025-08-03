@@ -24,7 +24,7 @@ import win.com.MainActivity
 import win.com.R
 import win.com.data.entity.TeamEntity
 import win.com.data.entity.TeamParticipantEntity
-import win.com.ui.teams.TeamViewModel
+import win.com.viewmodel.TeamViewModel
 
 class EditTeamFragment : Fragment() {
 
@@ -75,7 +75,7 @@ class EditTeamFragment : Fragment() {
         addParticipantButton = view.findViewById(R.id.buttonAddParticipant)
 
         backButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
         }
 
         setupRoleSpinner()

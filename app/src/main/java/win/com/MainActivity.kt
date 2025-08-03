@@ -17,11 +17,11 @@ import androidx.fragment.app.FragmentManager
 import win.com.ui.LoadingFragment
 import win.com.ui.SettingsFragment
 import win.com.ui.welcome.WelcomeFragment
-import win.com.ui.WorkoutFragment
-import win.com.ui.WorkoutPlanConstants
 import win.com.ui.dashboard.DashboardFragment
 import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
+import win.com.ui.event.EditEventFragment
+import win.com.ui.event.ViewEventFragment
 import win.com.ui.team.CreateTeamFragment
 import win.com.ui.team.EditTeamFragment
 import win.com.ui.team.TeamsManagerFragment
@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = Color.TRANSPARENT
 
-        WorkoutPlanConstants.loadIndividualPlans(this)
         setContentView(R.layout.activity_main)
 
         // Принудительно установить английскую локаль
@@ -108,12 +107,17 @@ class MainActivity : AppCompatActivity() {
 
             when (fragment) {
                 is DashboardFragment -> updateNavIcons("dashboard")
+
                 is AllEventsFragment -> updateNavIcons("events")
                 is CreateEventFragment -> updateNavIcons("events")
+                is ViewEventFragment -> updateNavIcons("events")
+                is EditEventFragment -> updateNavIcons("events")
+
                 is TeamsManagerFragment -> updateNavIcons("teams")
                 is CreateTeamFragment -> updateNavIcons("teams")
                 is EditTeamFragment -> updateNavIcons("teams")
                 is ViewTeamFragment -> updateNavIcons("teams")
+
                 is SettingsFragment -> updateNavIcons("set")
                 else -> {
                     // Можно сбросить иконки или скрыть навигацию, если нужен кастом
@@ -221,15 +225,6 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragmentContainer, fragment)
-            .commit()
-    }
-
-    fun openWorkoutFragment() {
-        showBottomNav()
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFragmentContainer, WorkoutFragment())
-            .addToBackStack(null)
             .commit()
     }
 

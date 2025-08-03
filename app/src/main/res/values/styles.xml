@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="CustomDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Цвет тулбара (шапки) -->
+        <item name="colorPrimary">@color/custom_date_picker_header_color</item>
+        <item name="colorAccent">@color/custom_date_picker_header_color</item>
+        <!-- Цвет текста в шапке -->
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
     <style name="PushupBorderButton">
         <item name="android:background">@drawable/button_bordered</item>
         <item name="android:textColor">#FFD700</item>

@@ -40,12 +40,9 @@ class MainFragment : Fragment() {
                     .putBoolean("isFirstLaunch", false)
                     .putBoolean("hasStarted", true)
                     .apply()
-            } else if (hasStarted) {
-                // Перенаправить на экран тренировки
-                (activity as? MainActivity)?.openWorkoutFragment()  // Переход через MainActivity
             } else {
                 // Если не первый запуск, но не нажал старт (на всякий случай)
-                (activity as? MainActivity)?.openWorkoutFragment()  // Переход через MainActivity
+                (activity as? MainActivity)?.openDashboardFragment()  // Переход через MainActivity
             }
         }
 

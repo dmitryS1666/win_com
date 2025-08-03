@@ -10,7 +10,7 @@ import win.com.MainActivity
 import win.com.R
 import win.com.data.entity.TeamEntity
 import win.com.data.entity.TeamParticipantEntity
-import win.com.ui.teams.TeamViewModel
+import win.com.viewmodel.TeamViewModel
 
 class CreateTeamFragment : Fragment() {
 
@@ -132,6 +132,5 @@ class CreateTeamFragment : Fragment() {
         Toast.makeText(requireContext(), "Team created!", Toast.LENGTH_SHORT).show()
 
         (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
-        (activity as? MainActivity)?.updateNavIcons("teams")
     }
 }

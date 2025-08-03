@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import win.com.data.dao.TeamDao
 import win.com.data.dao.TeamParticipantDao
+import win.com.data.dao.TeamParticipantsCount
 import win.com.data.entity.TeamEntity
 import win.com.data.entity.TeamParticipantEntity
 
@@ -66,4 +67,20 @@ class TeamRepository(
             Log.e("SAVE", "Error updating participants: ${e.message}", e)
         }
     }
+
+    suspend fun insertParticipant(participant: TeamParticipantEntity) {
+        teamParticipantDao.insertParticipant(participant)
+    }
+
+    suspend fun getTeamByName(teamName: String): TeamEntity? {
+        return teamDao.getTeamByName(teamName)
+    }
+
+    suspend fun insertTeamParticipant(teamParticipant: TeamParticipantEntity) {
+        teamDao.insertTeamParticipant(teamParticipant)
+    }
+
+    fun getParticipantsCountByTeam(): Flow<List<TeamParticipantsCount>> = teamParticipantDao.getParticipantsCountByTeam()
+
+    fun getAllParticipants(): Flow<List<TeamParticipantEntity>> = teamParticipantDao.getAllParticipants()
 }

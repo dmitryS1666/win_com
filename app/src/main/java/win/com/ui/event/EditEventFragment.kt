@@ -1,15 +1,21 @@
 package win.com.ui.event
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import win.com.MainActivity
 import win.com.R
 import win.com.data.entity.EventEntity
-import win.com.ui.dashboard.DashboardViewModel
-import win.com.ui.team.TeamsManagerFragment
+import win.com.data.entity.ParticipantEntity
+import win.com.data.entity.TeamParticipantEntity
+import win.com.viewmodel.DashboardViewModel
+import win.com.viewmodel.TeamViewModel
 import win.com.util.GameCategories
 import win.com.util.GameModes
 
@@ -17,13 +23,22 @@ class EditEventFragment : Fragment() {
 
     private lateinit var viewModel: DashboardViewModel
     private var eventId: Int = -1
+    private lateinit var editPlayerName: EditText
+    private lateinit var spinnerRole: Spinner
+    private lateinit var spinnerTeam: Spinner
+    private lateinit var participantList: LinearLayout
+    private val addedParticipants = mutableListOf<ParticipantEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         eventId = arguments?.getInt(ARG_EVENT_ID) ?: -1
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_edit_event, container, false)
     }
 
@@ -41,16 +56,36 @@ class EditEventFragment : Fragment() {
         val backButton = view.findViewById<ImageView>(R.id.backButton)
 
         // Устанавливаем адаптеры для спиннеров с твоими списками
-        val categoryAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_white, GameCategories.list)
+        val categoryAdapter =
+            ArrayAdapter(requireContext(), R.layout.spinner_item_white, GameCategories.list)
         categoryAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_white)
         categorySpinner.adapter = categoryAdapter
 
-        val modeAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_white, GameModes.list)
+        val modeAdapter =
+            ArrayAdapter(requireContext(), R.layout.spinner_item_white, GameModes.list)
         modeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_white)
         modeSpinner.adapter = modeAdapter
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
+            (activity as? MainActivity)?.openFragment(AllEventsFragment())
+        }
+
+        viewModel.getParticipantsByEventId(eventId).observe(viewLifecycleOwner) { list ->
+            list.forEach { participant ->
+                addedParticipants.add(participant)
+                addParticipantCard(participant)
+            }
+        }
+
+        editPlayerName = view.findViewById(R.id.editPlayerName)
+        spinnerRole = view.findViewById(R.id.spinnerRole)
+        spinnerTeam = view.findViewById(R.id.spinnerTeam)
+        participantList = view.findViewById(R.id.participantList)
+
+        setupSpinners()
+
+        view.findViewById<Button>(R.id.buttonAddParticipant).setOnClickListener {
+            addParticipantUI()
         }
 
         if (eventId != -1) {
@@ -93,8 +128,32 @@ class EditEventFragment : Fragment() {
                 isPrivate = false
             )
 
-            viewModel.updateEvent(updatedEvent)
-            parentFragmentManager.popBackStack()
+            // Запускаем корутин для операций с БД
+            lifecycleScope.launch {
+                viewModel.updateEvent(updatedEvent)
+                viewModel.deleteParticipantsByEventId(updatedEvent.id)
+
+                val teamViewModel = ViewModelProvider(requireActivity())[TeamViewModel::class.java]
+
+                for (participant in addedParticipants) {
+                    participant.eventId = updatedEvent.id
+                    viewModel.insertParticipant(participant)
+
+                    participant.team?.let { teamName ->
+                        val team = teamViewModel.getTeamByName(teamName)
+                        if (team != null) {
+                            val teamParticipant = TeamParticipantEntity(
+                                teamId = team.id.toLong(),
+                                name = participant.nickname,
+                                role = participant.role
+                            )
+                            teamViewModel.insertTeamParticipant(teamParticipant)
+                        }
+                    }
+                }
+
+                (activity as? MainActivity)?.openFragment(AllEventsFragment())
+            }
         }
     }
 
@@ -105,6 +164,154 @@ class EditEventFragment : Fragment() {
             }
         }
         return 0
+    }
+
+    private fun setupSpinners() {
+        val roles = listOf("HOST", "PILOT", "ENGINEER")
+        spinnerRole.adapter = ArrayAdapter(requireContext(), R.layout.spinner_item_white, roles)
+
+        // Загрузить команды из ViewModel
+        viewModel.teams.observe(viewLifecycleOwner) { teamList ->
+            val teamNames = teamList.map { it.name }
+            spinnerTeam.adapter =
+                ArrayAdapter(requireContext(), R.layout.spinner_item_white, teamNames)
+        }
+    }
+
+    private fun addParticipantUI() {
+        val name = editPlayerName.text.toString().trim()
+        val role = spinnerRole.selectedItem.toString()
+        val team = spinnerTeam.selectedItem?.toString()
+
+        if (name.isBlank()) {
+            Toast.makeText(requireContext(), "Enter name", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val participant = ParticipantEntity(
+            eventId = 0, // проставишь позже при сохранении
+            nickname = name,
+            team = team,
+            role = role
+        )
+
+        addedParticipants.add(participant)
+
+        // UI блок участника
+        val container = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(12, 12, 12, 12)
+            background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_bg)
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(0, 10, 0, 0)
+            layoutParams = params
+        }
+
+        val textView = TextView(requireContext()).apply {
+            text = "$name - $role (${team ?: "No Team"})"
+            setTextColor(Color.WHITE)
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+
+        val deleteButton = ImageButton(requireContext()).apply {
+            setImageResource(R.drawable.ic_delete)
+            background = null
+            setColorFilter(Color.WHITE)
+            setOnClickListener {
+                participantList.removeView(container)
+                addedParticipants.remove(participant)
+            }
+        }
+
+        container.addView(textView)
+        container.addView(deleteButton)
+        participantList.addView(container)
+
+        // очистить поля
+        editPlayerName.setText("")
+    }
+
+    private fun addParticipantCard(participant: ParticipantEntity) {
+        val card = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16, 12, 16, 12)
+            background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_bg)
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(0, 10, 0, 0)
+            layoutParams = params
+        }
+
+        // Горизонтальный блок с именем и кнопкой удаления
+        val topRow = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            gravity = Gravity.CENTER_VERTICAL
+        }
+
+        val nameView = TextView(requireContext()).apply {
+            text = "Player: ${participant.nickname}"
+            setTextColor(Color.WHITE)
+            textSize = 13f
+            setPadding(15, 0, 0, 0)
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+
+        val deleteButton = ImageButton(requireContext()).apply {
+            setImageResource(R.drawable.ic_delete)
+            background = null
+            setColorFilter(Color.WHITE)
+
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = 24 // опустить кнопку вниз на 24px — подбери нужное значение
+            }
+
+            setOnClickListener {
+                participantList.removeView(card)
+                addedParticipants.remove(participant)
+            }
+        }
+
+        topRow.addView(nameView)
+        topRow.addView(deleteButton)
+
+        val teamView = TextView(requireContext()).apply {
+            text = "Team: ${participant.team ?: "No Team"}"
+            setTextColor(Color.LTGRAY)
+            textSize = 13f
+            setPadding(15, 0, 0, 0)
+
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = -5 // поднимаем на 5px вверх
+            }
+        }
+
+        val roleView = TextView(requireContext()).apply {
+            text = "Role: ${participant.role}"
+            setTextColor(Color.LTGRAY)
+            textSize = 13f
+            setPadding(15, 5, 0, 15)
+        }
+
+            // Собираем карточку
+        card.addView(topRow)
+        card.addView(teamView)
+        card.addView(roleView)
+        participantList.addView(card)
     }
 
     companion object {

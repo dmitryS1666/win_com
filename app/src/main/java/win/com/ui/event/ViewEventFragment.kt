@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import win.com.MainActivity
 import win.com.R
-import win.com.ui.dashboard.DashboardViewModel
+import win.com.viewmodel.DashboardViewModel
 
 class ViewEventFragment : Fragment() {
 
@@ -43,6 +44,7 @@ class ViewEventFragment : Fragment() {
         val editButton = view.findViewById<TextView>(R.id.editButton)
         val editIcon = view.findViewById<ImageView>(R.id.editIcon)
         val deleteIcon = view.findViewById<ImageView>(R.id.iconDelete)
+        val participantContainer = view.findViewById<LinearLayout>(R.id.participantContainer)
 
         // Назад
         backButton.setOnClickListener {
@@ -79,6 +81,55 @@ class ViewEventFragment : Fragment() {
                 category.text = event.category
                 mode.text = event.mode
                 players.text = "${event.maxParticipants} participants"
+            }
+        }
+
+        viewModel.getParticipantsByEventId(eventId).observe(viewLifecycleOwner) { participants ->
+            participantContainer.removeAllViews()
+
+            if (participants.isNullOrEmpty()) {
+                val noParticipants = TextView(requireContext()).apply {
+                    text = "No participants yet"
+                    setTextColor(resources.getColor(android.R.color.white, null))
+                    textSize = 16f
+                }
+                participantContainer.addView(noParticipants)
+            } else {
+                for (p in participants) {
+                    val row = LinearLayout(requireContext()).apply {
+                        orientation = LinearLayout.HORIZONTAL
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        ).apply {
+                            topMargin = 6
+                        }
+                    }
+
+                    val nicknameView = TextView(requireContext()).apply {
+                        layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+                        text = p.nickname
+                        setTextColor(resources.getColor(android.R.color.white, null))
+                    }
+
+                    val teamView = TextView(requireContext()).apply {
+                        layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+                        text = p.team ?: "-"
+                        setTextColor(resources.getColor(android.R.color.white, null))
+                    }
+
+                    val roleView = TextView(requireContext()).apply {
+                        layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+                        text = p.role
+                        setTextColor(resources.getColor(android.R.color.white, null))
+                    }
+
+                    row.addView(nicknameView)
+                    row.addView(teamView)
+                    row.addView(roleView)
+
+                    participantContainer.addView(row)
+                }
             }
         }
     }

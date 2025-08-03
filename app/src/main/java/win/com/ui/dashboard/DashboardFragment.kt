@@ -15,7 +15,9 @@ import win.com.MainActivity
 import win.com.R
 import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
+import win.com.ui.event.EditEventFragment
 import win.com.ui.team.CreateTeamFragment
+import win.com.viewmodel.DashboardViewModel
 
 class DashboardFragment : Fragment() {
 
@@ -47,21 +49,35 @@ class DashboardFragment : Fragment() {
         })
 
         viewModel.lastEvent.observe(viewLifecycleOwner) { event ->
-            val eventTitle = if (event != null) "🏁 ${event.name}" else "🏁 Нет события"
-            val eventInfoDate = if (event != null) "📅 ${event.date}" else "Данных нет"
-            val eventInfoPart = if (event != null) "👥 0 / ${event.maxParticipants}" else "Данных нет"
+            if (event != null) {
+                val eventTitle = "🏁 ${event.name}"
+                val eventInfoDate = "📅 ${event.date}"
 
-            view.findViewById<TextView>(R.id.eventTitle).text = eventTitle
-            view.findViewById<TextView>(R.id.eventInfoDate).text = eventInfoDate
-            view.findViewById<TextView>(R.id.eventInfoPart).text = eventInfoPart
+                // Получаем участников
+                viewModel.getParticipantsForEvent(event.id).observe(viewLifecycleOwner) { participants ->
+                    val count = participants.size
+                    val max = event.maxParticipants
+                    val eventInfoPart = "👥 $count / $max"
 
-            view.findViewById<Button>(R.id.manageEventButton).setOnClickListener {
-                // TODO: перейти на EventDetailFragment с event.id
-                if (event != null) {
-                    // navigation logic here
-                } else {
-                    // можно показать тост или ничего не делать
+                    view.findViewById<TextView>(R.id.eventInfoPart).text = eventInfoPart
                 }
+
+                view.findViewById<TextView>(R.id.eventTitle).text = eventTitle
+                view.findViewById<TextView>(R.id.eventInfoDate).text = eventInfoDate
+
+                view.findViewById<Button>(R.id.manageEventButton).setOnClickListener {
+                    val fragment = EditEventFragment().apply {
+                        arguments = Bundle().apply {
+                            putInt("event_id", event.id)  // передаем ID события
+                        }
+                    }
+                    (activity as? MainActivity)?.openFragment(fragment)
+                }
+
+            } else {
+                view.findViewById<TextView>(R.id.eventTitle).text = "🏁 Нет события"
+                view.findViewById<TextView>(R.id.eventInfoDate).text = "Данных нет"
+                view.findViewById<TextView>(R.id.eventInfoPart).text = "Данных нет"
             }
         }
 

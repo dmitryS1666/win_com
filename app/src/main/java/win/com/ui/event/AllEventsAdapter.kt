@@ -1,5 +1,6 @@
 package win.com.ui.event
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,8 @@ import win.com.data.entity.EventEntity
 
 class AllEventsAdapter(
     private val onViewClick: (EventEntity) -> Unit,
-    private val onDeleteClick: (EventEntity) -> Unit
+    private val onDeleteClick: (EventEntity) -> Unit,
+    private var participantCounts: Map<Int, Int> = emptyMap()
 ) : ListAdapter<EventEntity, AllEventsAdapter.EventViewHolder>(
     object : DiffUtil.ItemCallback<EventEntity>() {
         override fun areItemsTheSame(oldItem: EventEntity, newItem: EventEntity) =
@@ -41,11 +43,13 @@ class AllEventsAdapter(
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.title.text = event.name
-        holder.date.text = "${event.date}"
-        holder.time.text = "${event.time}"
-        holder.category.text = "${event.category}"
-        holder.mode.text = "${event.mode}"
-        holder.players.text = "${event.maxParticipants}"
+        holder.date.text = event.date
+        holder.time.text = event.time
+        holder.category.text = event.category
+        holder.mode.text = event.mode
+
+        val currentCount = participantCounts[event.id] ?: 0
+        holder.players.text = "$currentCount / ${event.maxParticipants}"
 
         holder.iconView.setOnClickListener {
             onViewClick(event)
@@ -54,5 +58,11 @@ class AllEventsAdapter(
         holder.iconDelete.setOnClickListener {
             onDeleteClick(event)
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateParticipantCounts(newMap: Map<Int, Int>) {
+        participantCounts = newMap
+        notifyDataSetChanged()
     }
 }

@@ -20,4 +20,18 @@ interface ParticipantDao {
 
     @Query("DELETE FROM events WHERE id = :participantId")
     suspend fun delete(participantId: Int)
+
+    @Query("SELECT * FROM participants WHERE eventId = :eventId")
+    fun getParticipantsForEvent(eventId: Int): Flow<List<ParticipantEntity>>
+
+    @Query("DELETE FROM participants WHERE eventId = :eventId")
+    suspend fun deleteByEventId(eventId: Int)
+
+    @Query("SELECT eventId, COUNT(*) as count FROM participants GROUP BY eventId")
+    fun getParticipantCountsByEvent(): Flow<List<EventParticipantCount>>
 }
+
+data class EventParticipantCount(
+    val eventId: Int,
+    val count: Int
+)

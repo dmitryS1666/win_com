@@ -1,19 +1,16 @@
-package win.com.ui.teams
-
+package win.com.viewmodel
 import android.app.Application
-import androidx.annotation.OptIn
+import android.util.Log
 import androidx.lifecycle.*
-import androidx.media3.common.util.Log
-import androidx.media3.common.util.UnstableApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import win.com.data.dao.TeamParticipantsCount
 import win.com.data.database.AppDatabase
 import win.com.data.entity.TeamEntity
 import win.com.data.entity.TeamParticipantEntity
-import win.com.data.repository.TeamParticipantRepository
 import win.com.data.repository.TeamRepository
 
 class TeamViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,6 +20,8 @@ class TeamViewModel(application: Application) : AndroidViewModel(application) {
     private val saveScope = CoroutineScope(Dispatchers.IO + job)
 
     val allTeams: LiveData<List<TeamEntity>>
+    val allParticipants: LiveData<List<TeamParticipantEntity>>
+    val participantsCountByTeam: LiveData<List<TeamParticipantsCount>>
 
     init {
         val db = AppDatabase.getDatabase(application)
@@ -31,8 +30,12 @@ class TeamViewModel(application: Application) : AndroidViewModel(application) {
         repository = TeamRepository(teamDao, teamParticipantDao, viewModelScope)
 
         allTeams = repository.getAllTeams()
-            .map { it.sortedByDescending { team -> team.id } }
+            .map { list -> list.sortedByDescending { it.id } }
             .asLiveData()
+
+        allParticipants = repository.getAllParticipants().asLiveData()
+
+        participantsCountByTeam = repository.getParticipantsCountByTeam().asLiveData()
     }
 
     fun insertWithParticipants(team: TeamEntity, participants: List<TeamParticipantEntity>) {
@@ -53,7 +56,6 @@ class TeamViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getTeamById(id: Int): LiveData<TeamEntity> = repository.getById(id)
 
-    @OptIn(UnstableApi::class)
     fun saveTeamAndParticipants(team: TeamEntity, participants: List<TeamParticipantEntity>) {
         saveScope.launch {
             try {
@@ -63,6 +65,14 @@ class TeamViewModel(application: Application) : AndroidViewModel(application) {
                 Log.e("SAVE", "Exception in saveTeamAndParticipants: ${e.message}", e)
             }
         }
+    }
+
+    suspend fun getTeamByName(teamName: String): TeamEntity? {
+        return repository.getTeamByName(teamName)
+    }
+
+    suspend fun insertTeamParticipant(teamParticipant: TeamParticipantEntity) {
+        repository.insertTeamParticipant(teamParticipant)
     }
 
     override fun onCleared() {

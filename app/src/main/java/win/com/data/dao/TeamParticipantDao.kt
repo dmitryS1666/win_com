@@ -24,4 +24,15 @@ interface TeamParticipantDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(participants: List<TeamParticipantEntity>)
+
+    @Query("SELECT * FROM team_participants")
+    fun getAllParticipants(): Flow<List<TeamParticipantEntity>>
+
+    @Query("SELECT teamId, COUNT(*) as count FROM team_participants GROUP BY teamId")
+    fun getParticipantsCountByTeam(): Flow<List<TeamParticipantsCount>>
 }
+
+data class TeamParticipantsCount(
+    val teamId: Long,
+    val count: Int
+)

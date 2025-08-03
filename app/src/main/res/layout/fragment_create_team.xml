@@ -65,7 +65,7 @@
         <Spinner
             android:id="@+id/spinnerRole"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="48dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/spinner_background"
             android:popupBackground="#1A2239" />
@@ -91,7 +91,7 @@
             android:id="@+id/buttonCreateTeam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create Event"
+            android:text="Create Team"
             android:layout_marginTop="20dp"
             android:backgroundTint="#3B82F6"
             android:background="@drawable/rounded_button_bg"

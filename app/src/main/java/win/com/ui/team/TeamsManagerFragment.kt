@@ -14,12 +14,15 @@ import androidx.recyclerview.widget.RecyclerView
 import win.com.MainActivity
 import win.com.R
 import win.com.data.entity.TeamEntity
-import win.com.ui.teams.TeamViewModel
+import win.com.data.entity.TeamParticipantEntity
+import win.com.viewmodel.TeamViewModel
 
 class TeamsManagerFragment : Fragment() {
 
     private lateinit var viewModel: TeamViewModel
     private lateinit var adapter: TeamAdapter
+    private var participants: List<TeamParticipantEntity> = emptyList()
+    private var participantsCountMap: Map<Long, Int> = emptyMap()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,19 +32,26 @@ class TeamsManagerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewModel = ViewModelProvider(this)[TeamViewModel::class.java]
+
+        viewModel.participantsCountByTeam.observe(viewLifecycleOwner) { list ->
+            participantsCountMap = list.associate { it.teamId to it.count }
+            adapter.updateParticipantsCount(participantsCountMap)
+        }
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewTeams)
         val createBtn = view.findViewById<Button>(R.id.buttonCreateTeam)
         val backButton = view.findViewById<ImageView>(R.id.backButton)
 
-        // Возврат назад
         backButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
         }
 
         adapter = TeamAdapter(
             listOf(),
+            participants,
             onEdit = { team -> navigateToEdit(team) },
             onDelete = { team -> confirmDelete(team) },
             onView = { team -> navigateToTeamPlayers(team) }
@@ -50,13 +60,19 @@ class TeamsManagerFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
+        // Обновляем список команд
         viewModel.allTeams.observe(viewLifecycleOwner) {
             adapter.updateList(it)
         }
 
+        // Обновляем список участников
+        viewModel.allParticipants.observe(viewLifecycleOwner) {
+            participants = it
+            adapter.updateParticipants(it)
+        }
+
         createBtn.setOnClickListener {
             (activity as? MainActivity)?.openFragment(CreateTeamFragment())
-            (activity as? MainActivity)?.updateNavIcons("teams")
         }
     }
 

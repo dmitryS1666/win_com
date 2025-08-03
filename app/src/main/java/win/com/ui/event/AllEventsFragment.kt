@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import win.com.MainActivity
 import win.com.R
-import win.com.ui.dashboard.DashboardViewModel
+import win.com.viewmodel.DashboardViewModel
 
 class AllEventsFragment : Fragment() {
 
     private lateinit var viewModel: DashboardViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AllEventsAdapter
+    private var participantCounts: Map<Int, Int> = emptyMap()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +35,11 @@ class AllEventsFragment : Fragment() {
         // Возврат назад
         backButton.setOnClickListener {
             parentFragmentManager.popBackStack()
+        }
+
+        viewModel.participantCountsByEvent.observe(viewLifecycleOwner) { map ->
+            participantCounts = map
+            adapter.updateParticipantCounts(map)
         }
 
         recyclerView = view.findViewById(R.id.recyclerAllEvents)

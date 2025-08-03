@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import win.com.MainActivity
 import win.com.R
-import win.com.ui.teams.TeamViewModel
+import win.com.viewmodel.TeamViewModel
 
 class ViewTeamFragment : Fragment() {
 
