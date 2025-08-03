@@ -13,11 +13,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import win.com.MainActivity
 import win.com.R
+import win.com.data.database.AppDatabase
+import win.com.data.repository.DataRepository
 import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
 import win.com.ui.event.EditEventFragment
 import win.com.ui.team.CreateTeamFragment
 import win.com.viewmodel.DashboardViewModel
+import win.com.viewmodel.DashboardViewModelFactory
 
 class DashboardFragment : Fragment() {
 
@@ -35,7 +38,12 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onViewCreated(view: android.view.View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+        val application = requireActivity().application
+        val db = AppDatabase.getDatabase(application)
+        val dataRepository = DataRepository(db.eventDao(), db.participantDao(), db.teamParticipantDao(), db.teamDao())
+
+        val factory = DashboardViewModelFactory(application, dataRepository)
+        viewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
 
         imageSlider = view.findViewById(R.id.imageSlider)
         sliderDots = view.findViewById(R.id.sliderDots1)
@@ -76,8 +84,8 @@ class DashboardFragment : Fragment() {
 
             } else {
                 view.findViewById<TextView>(R.id.eventTitle).text = "🏁 Нет события"
-                view.findViewById<TextView>(R.id.eventInfoDate).text = "Данных нет"
-                view.findViewById<TextView>(R.id.eventInfoPart).text = "Данных нет"
+                view.findViewById<TextView>(R.id.eventInfoDate).text = "Empty data"
+                view.findViewById<TextView>(R.id.eventInfoPart).text = "Empty data"
             }
         }
 

@@ -13,7 +13,6 @@ import win.com.R
 class LoadingFragment : Fragment() {
 
     private var loadingCircleView: LoadingCircleView? = null
-    private var percentageText: TextView? = null
     private var progressAnimator: ValueAnimator? = null
 
     override fun onCreateView(
@@ -27,7 +26,6 @@ class LoadingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadingCircleView = view.findViewById(R.id.loadingCircle)
-        percentageText = view.findViewById(R.id.percentageText)
 
         startLoadingAnimation()
     }
@@ -37,7 +35,6 @@ class LoadingFragment : Fragment() {
             duration = 5000
             addUpdateListener { animator ->
                 val progress = animator.animatedValue as Int
-                percentageText?.text = "$progress%" // можно убрать, если текст уже в круге
                 loadingCircleView?.setProgress(progress)
 
                 if (progress == 100) {

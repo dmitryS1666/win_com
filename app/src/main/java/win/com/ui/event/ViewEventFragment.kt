@@ -13,7 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import win.com.MainActivity
 import win.com.R
+import win.com.data.database.AppDatabase
+import win.com.data.repository.DataRepository
 import win.com.viewmodel.DashboardViewModel
+import win.com.viewmodel.DashboardViewModelFactory
 
 class ViewEventFragment : Fragment() {
 
@@ -30,7 +33,12 @@ class ViewEventFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+        val application = requireActivity().application
+        val db = AppDatabase.getDatabase(application)
+        val dataRepository = DataRepository(db.eventDao(), db.participantDao(), db.teamParticipantDao(), db.teamDao())
+
+        val factory = DashboardViewModelFactory(application, dataRepository)
+        viewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
 
         val title = view.findViewById<TextView>(R.id.viewEventTitle)
         val date = view.findViewById<TextView>(R.id.viewEventDate)

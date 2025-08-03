@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import win.com.MainActivity
 import win.com.R
+import win.com.data.database.AppDatabase
+import win.com.data.repository.DataRepository
+import win.com.ui.dashboard.DashboardFragment
 import win.com.viewmodel.DashboardViewModel
+import win.com.viewmodel.DashboardViewModelFactory
 
 class AllEventsFragment : Fragment() {
 
@@ -29,12 +33,18 @@ class AllEventsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+        val application = requireActivity().application
+        val db = AppDatabase.getDatabase(application)
+        val dataRepository = DataRepository(db.eventDao(), db.participantDao(), db.teamParticipantDao(), db.teamDao())
+
+        val factory = DashboardViewModelFactory(application, dataRepository)
+        viewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
+
         val backButton = view.findViewById<ImageView>(R.id.backButton)
 
         // Возврат назад
         backButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            (activity as? MainActivity)?.openFragment(DashboardFragment())
         }
 
         viewModel.participantCountsByEvent.observe(viewLifecycleOwner) { map ->

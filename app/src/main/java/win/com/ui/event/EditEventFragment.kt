@@ -11,13 +11,16 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import win.com.MainActivity
 import win.com.R
+import win.com.data.database.AppDatabase
 import win.com.data.entity.EventEntity
 import win.com.data.entity.ParticipantEntity
 import win.com.data.entity.TeamParticipantEntity
+import win.com.data.repository.DataRepository
 import win.com.viewmodel.DashboardViewModel
 import win.com.viewmodel.TeamViewModel
 import win.com.util.GameCategories
 import win.com.util.GameModes
+import win.com.viewmodel.DashboardViewModelFactory
 
 class EditEventFragment : Fragment() {
 
@@ -43,7 +46,12 @@ class EditEventFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+        val application = requireActivity().application
+        val db = AppDatabase.getDatabase(application)
+        val dataRepository = DataRepository(db.eventDao(), db.participantDao(), db.teamParticipantDao(), db.teamDao())
+
+        val factory = DashboardViewModelFactory(application, dataRepository)
+        viewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
 
         val nameInput = view.findViewById<EditText>(R.id.editEventName)
         val dateInput = view.findViewById<EditText>(R.id.editEventDate)

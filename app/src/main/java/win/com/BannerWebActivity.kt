@@ -58,7 +58,6 @@ class BannerWebActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MusicPlayerManager.stop()
 
         // Иммерсивный UI
         WindowCompat.setDecorFitsSystemWindows(window, false)

@@ -29,6 +29,9 @@ interface ParticipantDao {
 
     @Query("SELECT eventId, COUNT(*) as count FROM participants GROUP BY eventId")
     fun getParticipantCountsByEvent(): Flow<List<EventParticipantCount>>
+
+    @Query("DELETE FROM participants")
+    suspend fun clearAllParticipants()
 }
 
 data class EventParticipantCount(

@@ -14,19 +14,19 @@ class LoadingCircleView @JvmOverloads constructor(
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.DKGRAY
         style = Paint.Style.STROKE
-        strokeWidth = 20f
+        strokeWidth = 30f
     }
 
     private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.MAGENTA
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
-        strokeWidth = 20f
+        strokeWidth = 30f
     }
 
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
-        textSize = 80f
+        textSize = 120f
         textAlign = Paint.Align.CENTER
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     }

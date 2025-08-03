@@ -30,6 +30,9 @@ interface TeamParticipantDao {
 
     @Query("SELECT teamId, COUNT(*) as count FROM team_participants GROUP BY teamId")
     fun getParticipantsCountByTeam(): Flow<List<TeamParticipantsCount>>
+
+    @Query("DELETE FROM teams")
+    suspend fun clearAllTeamParticipants()
 }
 
 data class TeamParticipantsCount(

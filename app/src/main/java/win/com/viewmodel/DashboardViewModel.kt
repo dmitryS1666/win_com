@@ -12,10 +12,14 @@ import win.com.data.database.AppDatabase
 import win.com.data.entity.EventEntity
 import win.com.data.entity.ParticipantEntity
 import win.com.data.entity.TeamEntity
+import win.com.data.repository.DataRepository
 import win.com.data.repository.EventRepository
 import win.com.data.repository.ParticipantRepository
 
-class DashboardViewModel(application: Application) : AndroidViewModel(application) {
+class DashboardViewModel(
+    application: Application,
+    private val dataRepository: DataRepository
+) : AndroidViewModel(application) {
     private val repository: EventRepository
 
     val lastEvent: LiveData<EventEntity?>
@@ -79,5 +83,11 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getParticipantsForEvent(eventId: Int): LiveData<List<ParticipantEntity>> {
         return repository.getParticipantsByEventId(eventId)
+    }
+
+    fun clearAllData() {
+        viewModelScope.launch {
+            dataRepository.clearAllData()
+        }
     }
 }

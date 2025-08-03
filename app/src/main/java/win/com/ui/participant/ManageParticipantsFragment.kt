@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import win.com.MainActivity
 import win.com.R
 import win.com.data.entity.TeamEntity
 import win.com.data.entity.TeamParticipantEntity
+import win.com.ui.dashboard.DashboardFragment
+import win.com.ui.event.AllEventsFragment
 import win.com.ui.participants.ParticipantAdapter
 import win.com.viewmodel.TeamViewModel
 
@@ -56,7 +59,7 @@ class ManageParticipantsFragment : Fragment() {
 
     private fun setupUI() {
         backButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            (activity as? MainActivity)?.openFragment(AllEventsFragment())
         }
 
         val roles = listOf("PILOT", "NAVIGATOR", "ENGINEER")

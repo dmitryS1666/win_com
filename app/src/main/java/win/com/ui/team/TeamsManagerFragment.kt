@@ -15,6 +15,7 @@ import win.com.MainActivity
 import win.com.R
 import win.com.data.entity.TeamEntity
 import win.com.data.entity.TeamParticipantEntity
+import win.com.ui.dashboard.DashboardFragment
 import win.com.viewmodel.TeamViewModel
 
 class TeamsManagerFragment : Fragment() {
@@ -46,7 +47,7 @@ class TeamsManagerFragment : Fragment() {
         val backButton = view.findViewById<ImageView>(R.id.backButton)
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
+            (activity as? MainActivity)?.openFragment(DashboardFragment())
         }
 
         adapter = TeamAdapter(

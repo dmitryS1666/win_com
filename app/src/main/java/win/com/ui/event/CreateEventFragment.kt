@@ -56,7 +56,7 @@ class CreateEventFragment : Fragment() {
 
         // Возврат назад
         backButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            (activity as? MainActivity)?.openFragment(AllEventsFragment())
         }
 
         context?.let { ctx ->
@@ -82,11 +82,17 @@ class CreateEventFragment : Fragment() {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
+
+            dialog.setOnShowListener {
+                dialog.window?.setBackgroundDrawableResource(R.color.custom_date_picker_main_color)
+            }
+
             dialog.show()
         }
 
         timeInput.setOnClickListener {
-            TimePickerDialog(requireContext(),
+            val dialog = TimePickerDialog(
+                ContextThemeWrapper(requireContext(), R.style.CustomTimePickerDialogTheme),
                 { _, h, m ->
                     val time = String.format("%02d:%02d", h, m)
                     timeInput.setText(time)
@@ -94,7 +100,14 @@ class CreateEventFragment : Fragment() {
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
                 true
-            ).show()
+            )
+
+            // Изменим фон, если нужно вручную, как и у DatePicker
+            dialog.setOnShowListener {
+                dialog.window?.setBackgroundDrawableResource(R.color.custom_date_picker_main_color)
+            }
+
+            dialog.show()
         }
 
         createButton.setOnClickListener {

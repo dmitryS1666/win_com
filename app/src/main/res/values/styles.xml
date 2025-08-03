@@ -4,8 +4,30 @@
         <!-- Цвет тулбара (шапки) -->
         <item name="colorPrimary">@color/custom_date_picker_header_color</item>
         <item name="colorAccent">@color/custom_date_picker_header_color</item>
-        <!-- Цвет текста в шапке -->
+
+        <!-- Цвет основного текста -->
         <item name="android:textColorPrimary">@android:color/white</item>
+
+        <!-- Резервный: влияет на текст кнопок (OK, CANCEL) -->
+        <item name="android:textColor">@android:color/white</item>
+
+        <!-- Цвет фона под календарем -->
+        <item name="android:windowBackground">@color/custom_date_picker_main_color</item>
+    </style>
+
+    <style name="CustomTimePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Цвет тулбара (заголовка) -->
+        <item name="colorPrimary">@color/custom_date_picker_header_color</item>
+        <item name="colorAccent">@color/custom_date_picker_header_color</item>
+
+        <!-- Цвет основного текста -->
+        <item name="android:textColorPrimary">@color/custom_date_picker_main_color</item>
+
+        <!-- Цвет текста кнопок (OK, CANCEL) -->
+        <item name="android:textColor">@android:color/white</item>
+
+        <!-- Цвет фона диалога -->
+        <item name="android:windowBackground">@color/custom_date_picker_main_color</item>
     </style>
 
     <style name="PushupBorderButton">
