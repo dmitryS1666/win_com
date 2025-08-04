@@ -14,7 +14,8 @@ class CreateEventViewModel(application: Application) : AndroidViewModel(applicat
     init {
         val dao = AppDatabase.getDatabase(application).eventDao()
         val participantDao = AppDatabase.getDatabase(application).participantDao()
-        repository = EventRepository(dao, participantDao)
+        val liveResultDao = AppDatabase.getDatabase(application).liveResultDao()
+        repository = EventRepository(dao, participantDao, liveResultDao)
     }
 
     fun createEvent(event: EventEntity, onComplete: () -> Unit) {

@@ -98,6 +98,12 @@ class EditEventFragment : Fragment() {
 
         if (eventId != -1) {
             viewModel.getEventById(eventId).observe(viewLifecycleOwner) { event ->
+                if (event.status != "PLANNED") {
+                    Toast.makeText(requireContext(), "Can't edit ongoing/completed events", Toast.LENGTH_SHORT).show()
+                    (activity as? MainActivity)?.openFragment(ViewEventFragment.newInstance(eventId))
+                    return@observe
+                }
+
                 nameInput.setText(event.name)
                 dateInput.setText(event.date)
                 timeInput.setText(event.time)

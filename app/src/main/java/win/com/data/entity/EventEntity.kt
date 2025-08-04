@@ -13,5 +13,6 @@ data class EventEntity(
     val mode: String,
     val rounds: Int,
     val maxParticipants: Int,
-    val isPrivate: Boolean
+    val isPrivate: Boolean,
+    val status: String = "PLANNED"
 )

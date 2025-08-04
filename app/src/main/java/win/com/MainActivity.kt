@@ -21,6 +21,7 @@ import win.com.ui.dashboard.DashboardFragment
 import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
 import win.com.ui.event.EditEventFragment
+import win.com.ui.event.LiveControlPanelFragment
 import win.com.ui.event.ViewEventFragment
 import win.com.ui.team.CreateTeamFragment
 import win.com.ui.team.EditTeamFragment
@@ -55,11 +56,11 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             val skipLoading = intent.getBooleanExtra("skip_loading", false)
-            if (!skipLoading) {
-                openLoadingFragment()
-            } else {
+//            if (!skipLoading) {
+//                openLoadingFragment()
+//            } else {
                 openMainFragment()
-            }
+//            }
         }
 
         hideSystemUI()
@@ -111,6 +112,7 @@ class MainActivity : AppCompatActivity() {
                 is CreateEventFragment -> updateNavIcons("events")
                 is ViewEventFragment -> updateNavIcons("events")
                 is EditEventFragment -> updateNavIcons("events")
+                is LiveControlPanelFragment -> updateNavIcons("events")
 
                 is TeamsManagerFragment -> updateNavIcons("teams")
                 is CreateTeamFragment -> updateNavIcons("teams")

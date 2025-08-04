@@ -90,7 +90,8 @@ class SplashActivity : AppCompatActivity() {
 //                        fetchBanner()
 //                    }
 //                } else {
-                    goToMain()
+//                    goToMain()
+                    handler.postDelayed({ goToMain() }, 1000) // или 1500 мс
 //                }
             }
         }.start()
@@ -131,7 +132,7 @@ class SplashActivity : AppCompatActivity() {
                         handleBanner(JSONObject(body))
                     }
                 } else {
-                    runOnUiThread { goToMain() }
+                    runOnUiThread { handler.postDelayed({ goToMain() }, 1000) }
                 }
             }
         })

@@ -91,6 +91,18 @@
                     android:text="Edit"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
+
+
+                <TextView
+                    android:id="@+id/eventStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/badge_gray"
+                    android:padding="4dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <TextView
@@ -267,6 +279,16 @@
 <!--                    android:textColor="@android:color/white" />-->
 <!--            </LinearLayout>-->
         </LinearLayout>
+
+        <Button
+            android:id="@+id/startEventButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Event"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/rounded_button_bg"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
 
         <!-- Кнопка создания -->
         <Button

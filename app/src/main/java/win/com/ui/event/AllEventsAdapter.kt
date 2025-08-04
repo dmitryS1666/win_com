@@ -51,6 +51,24 @@ class AllEventsAdapter(
         val currentCount = participantCounts[event.id] ?: 0
         holder.players.text = "$currentCount / ${event.maxParticipants}"
 
+        // ⚡ Находим бейдж статуса
+        val badge = holder.itemView.findViewById<TextView>(R.id.eventStatusBadge)
+
+        // 🏷️ Устанавливаем бейдж по статусу
+        when (event.status) {
+            "ONGOING" -> {
+                badge.text = "Ongoing"
+                badge.setBackgroundResource(R.drawable.badge_green)
+                badge.visibility = View.VISIBLE
+            }
+            "COMPLETED" -> {
+                badge.text = "Completed"
+                badge.setBackgroundResource(R.drawable.badge_gray)
+                badge.visibility = View.VISIBLE
+            }
+            else -> badge.visibility = View.GONE
+        }
+
         holder.iconView.setOnClickListener {
             onViewClick(event)
         }

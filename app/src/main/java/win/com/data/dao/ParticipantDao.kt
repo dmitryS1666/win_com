@@ -32,6 +32,12 @@ interface ParticipantDao {
 
     @Query("DELETE FROM participants")
     suspend fun clearAllParticipants()
+
+    @Query("UPDATE participants SET lapTime = :lapTime WHERE eventId = :eventId AND nickname = :nickname")
+    suspend fun updateLapTime(eventId: Int, nickname: String, lapTime: String)
+
+    @Query("UPDATE participants SET pos = :pos WHERE eventId = :eventId AND nickname = :nickname")
+    suspend fun updatePosition(eventId: Int, nickname: String, pos: String)
 }
 
 data class EventParticipantCount(

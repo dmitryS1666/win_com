@@ -27,12 +27,10 @@ class ParticipantAdapter(
 
     override fun getItemCount(): Int = participants.size
 
-    fun removeParticipant(participant: TeamParticipantEntity) {
-        val index = participants.indexOf(participant)
-        if (index != -1) {
-            participants.removeAt(index)
-            notifyItemRemoved(index)
-        }
+    fun updateParticipants(newParticipants: List<TeamParticipantEntity>) {
+        participants.clear()                  // очищаем старый список
+        participants.addAll(newParticipants) // добавляем новые элементы
+        notifyDataSetChanged()               // говорим адаптеру перерисовать список
     }
 
     inner class ParticipantViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

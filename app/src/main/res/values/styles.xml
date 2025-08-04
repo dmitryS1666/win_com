@@ -30,6 +30,21 @@
         <item name="android:windowBackground">@color/custom_date_picker_main_color</item>
     </style>
 
+    <style name="CustomTimePickerDialogTheme1" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Цвет тулбара (заголовка) -->
+        <item name="colorPrimary">@color/custom_date_picker_header_color</item>
+        <item name="colorAccent">@color/custom_date_picker_header_color</item>
+
+        <!-- Цвет основного текста -->
+        <item name="android:textColorPrimary">@color/custom_date_picker_main_color</item>
+
+        <!-- Цвет текста кнопок (OK, CANCEL) -->
+        <item name="android:textColor">@color/custom_date_picker_main_color</item>
+
+        <!-- Цвет фона диалога -->
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
     <style name="PushupBorderButton">
         <item name="android:background">@drawable/button_bordered</item>
         <item name="android:textColor">#FFD700</item>

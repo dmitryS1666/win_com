@@ -29,4 +29,10 @@ interface EventDao {
 
     @Query("DELETE FROM events")
     suspend fun clearAllEvents()
+
+    @Query("SELECT * FROM events WHERE id = :id LIMIT 1")
+    suspend fun getEventByIdNow(id: Int): EventEntity?
+
+    @Query("SELECT * FROM events WHERE status = 'FINISHED' ORDER BY date DESC, time DESC")
+    fun getFinishedEvents(): LiveData<List<EventEntity>>
 }

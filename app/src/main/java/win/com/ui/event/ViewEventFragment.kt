@@ -1,5 +1,6 @@
 package win.com.ui.event
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import win.com.MainActivity
 import win.com.R
 import win.com.data.database.AppDatabase
@@ -32,10 +35,15 @@ class ViewEventFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_view_event, container, false)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val application = requireActivity().application
         val db = AppDatabase.getDatabase(application)
         val dataRepository = DataRepository(db.eventDao(), db.participantDao(), db.teamParticipantDao(), db.teamDao())
+        val startEventButton = view.findViewById<Button>(R.id.startEventButton)
+
+        // ⚡ Находим бейдж статуса
+        val badge = view.findViewById<TextView>(R.id.eventStatusBadge)
 
         val factory = DashboardViewModelFactory(application, dataRepository)
         viewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
@@ -57,12 +65,6 @@ class ViewEventFragment : Fragment() {
         // Назад
         backButton.setOnClickListener {
             (activity as? MainActivity)?.openFragment(AllEventsFragment())
-        }
-
-        // Создание события
-        createButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(CreateEventFragment())
-            (activity as? MainActivity)?.updateNavIcons("events")
         }
 
         // Редактирование (кнопка или иконка)
@@ -89,6 +91,55 @@ class ViewEventFragment : Fragment() {
                 category.text = event.category
                 mode.text = event.mode
                 players.text = "${event.maxParticipants} participants"
+
+                if (event.status == "PLANNED") {
+                    startEventButton.visibility = View.VISIBLE
+                } else {
+                    startEventButton.visibility = View.GONE
+                    editButton.visibility = View.GONE
+                    editIcon.visibility = View.GONE
+                }
+
+                if (event.status == "ONGOING") {
+                    createButton.text = "Live Control"
+                    // добавь openFragment(LiveControlPanelFragment.newInstance(eventId)) в onClick
+                }
+
+                // 🏷️ Устанавливаем бейдж по статусу
+                when (event.status) {
+                    "ONGOING" -> {
+                        badge.text = "Ongoing"
+                        badge.setBackgroundResource(R.drawable.badge_green)
+                        badge.visibility = View.VISIBLE
+                    }
+                    "COMPLETED" -> {
+                        badge.text = "Completed"
+                        badge.setBackgroundResource(R.drawable.badge_gray)
+                        badge.visibility = View.VISIBLE
+                    }
+                    else -> badge.visibility = View.GONE
+                }
+
+                createButton.setOnClickListener {
+                    if (event.status == "ONGOING") {
+                        (activity as? MainActivity)?.openFragment(LiveControlPanelFragment.newInstance(eventId))
+//                        (activity as? MainActivity)?.updateNavIcons("events")
+                    } else {
+                        (activity as? MainActivity)?.openFragment(CreateEventFragment())
+//                        (activity as? MainActivity)?.updateNavIcons("events")
+                    }
+                }
+            }
+        }
+
+        startEventButton.setOnClickListener {
+            lifecycleScope.launch {
+                val ongoingEvent = viewModel.getEventByIdOnce(eventId)
+                if (ongoingEvent != null) {
+                    val updatedEvent = ongoingEvent.copy(status = "ONGOING")
+                    viewModel.updateEvent(updatedEvent)
+                    Toast.makeText(requireContext(), "Event started", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

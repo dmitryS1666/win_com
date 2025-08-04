@@ -9,5 +9,7 @@ data class ParticipantEntity(
     var eventId: Int,
     val nickname: String,
     val team: String?,
-    val role: String // HOST, PILOT, ORGA
+    val role: String, // HOST, PILOT, ORGA
+    var lapTime: String? = null,
+    var pos: String? = null
 )

@@ -5,8 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import win.com.data.dao.ParticipantDao
 import win.com.data.database.AppDatabase
 import win.com.data.entity.EventEntity
@@ -34,10 +36,11 @@ class DashboardViewModel(
 
         val eventDao = db.eventDao()
         val participantDao = db.participantDao()
+        val liveResultDao = db.liveResultDao()
 
         val teamDao = db.teamDao()
 
-        repository = EventRepository(eventDao, participantDao)
+        repository = EventRepository(eventDao, participantDao, liveResultDao)
 
         teams = teamDao.getAllTeams().asLiveData()
 
@@ -88,6 +91,12 @@ class DashboardViewModel(
     fun clearAllData() {
         viewModelScope.launch {
             dataRepository.clearAllData()
+        }
+    }
+
+    suspend fun getEventByIdOnce(id: Int): EventEntity? {
+        return withContext(Dispatchers.IO) {
+            repository.getEventByIdNow(id)
         }
     }
 }

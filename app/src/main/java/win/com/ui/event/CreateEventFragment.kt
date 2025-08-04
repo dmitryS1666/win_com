@@ -87,6 +87,9 @@ class CreateEventFragment : Fragment() {
                 dialog.window?.setBackgroundDrawableResource(R.color.custom_date_picker_main_color)
             }
 
+            // ✅ Ограничение: нельзя выбрать дату раньше сегодняшней
+            dialog.datePicker.minDate = System.currentTimeMillis()
+
             dialog.show()
         }
 
