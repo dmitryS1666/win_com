@@ -49,6 +49,9 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            pickFirsts += listOf(
+                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            )
         }
     }
 }
@@ -69,6 +72,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.play.services.ads.identifier)
+    implementation(libs.identity.jvm)
     kapt("androidx.room:room-compiler:2.7.2")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")

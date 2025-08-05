@@ -1,5 +1,6 @@
 package com.cyber90.events.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -13,13 +14,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.BuildConfig
-import com.google.android.gms.ads.identifier.AdvertisingIdClient
-import com.cyber90.events.BannerWebActivity
 import com.cyber90.events.MainActivity
 import com.cyber90.events.R
 import com.cyber90.events.data.database.AppDatabase
 import com.cyber90.events.data.repository.DataRepository
 import com.cyber90.events.ui.dashboard.DashboardFragment
+import com.cyber90.events.ui.privacy.PrivacyWebViewActivity
 import com.cyber90.events.viewmodel.DashboardViewModel
 import com.cyber90.events.viewmodel.DashboardViewModelFactory
 import java.util.UUID
@@ -56,7 +56,7 @@ class SettingsFragment : Fragment() {
         privacyPolicyLink = view.findViewById(R.id.privacyPolicyLink)
         backButton = view.findViewById(R.id.backButton)
 
-        val prefs = requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        val appPrefs = requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
 
         clearDataLayout.setOnClickListener {
             AlertDialog.Builder(requireContext())
@@ -64,7 +64,7 @@ class SettingsFragment : Fragment() {
                 .setMessage("Are you sure you want to delete all local data?")
                 .setPositiveButton("Yes") { _, _ ->
                     viewModel.clearAllData()
-                    prefs.edit().clear().apply()
+                    appPrefs.edit().clear().apply()
                     Toast.makeText(requireContext(), "Data cleared", Toast.LENGTH_SHORT).show()
                 }
                 .setNegativeButton("Cancel", null)
@@ -81,21 +81,21 @@ class SettingsFragment : Fragment() {
         rateLink.setOnClickListener {
             val uri = Uri.parse("market://details?id=${requireContext().packageName}")
             val intent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(intent)
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(context, "Google Play not found", Toast.LENGTH_SHORT).show()
+            }
         }
 
         privacyPolicyLink.setOnClickListener {
-            val prefs = requireContext().getSharedPreferences("privacy_prefs", Context.MODE_PRIVATE)
-            val userId = prefs.getString("user_id", null) ?: UUID.randomUUID().toString().also {
-                prefs.edit().putString("user_id", it).apply()
-            }
-
+            val bannerPrefs = requireContext().getSharedPreferences("banner_prefs", Context.MODE_PRIVATE)
+            val userId = bannerPrefs.getString("user_id", UUID.randomUUID().toString())
             val installer = getInstallerPackageName(requireContext())
-            val adId = getAdIdBlocking(requireContext())
 
-            val url = "https://cyber90.xyz/privacy/?installer=$installer&id_user=$userId&id_google=$adId"
+            val url = "https://cyber90.xyz/privacy/?installer=$installer&id_user=$userId"
 
-            val intent = Intent(requireContext(), BannerWebActivity::class.java)
+            val intent = Intent(requireContext(), PrivacyWebViewActivity::class.java)
             intent.putExtra("url", url)
             startActivity(intent)
         }
@@ -108,9 +108,10 @@ class SettingsFragment : Fragment() {
             isClickable = true
             isFocusable = true
         }
+
         supportLink.setOnClickListener {
-            val intent = Intent(requireContext(), BannerWebActivity::class.java)
-            intent.putExtra("url", "https://cyber90.xyz/contact.html")
+            val supportUrl = "https://cyber90.xyz/support/"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(supportUrl))
             startActivity(intent)
         }
 
@@ -123,24 +124,15 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
     private fun getInstallerPackageName(context: Context): String {
         return try {
-            val installer = context.packageManager
-                .getInstallSourceInfo(context.packageName)
-                .installingPackageName
-            installer ?: "unknown"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                context.packageManager.getInstallSourceInfo(context.packageName).installingPackageName ?: "unknown"
+            } else {
+                context.packageManager.getInstallerPackageName(context.packageName) ?: "unknown"
+            }
         } catch (e: Exception) {
             if (BuildConfig.DEBUG) "debug" else "unknown"
-        }
-    }
-
-    private fun getAdIdBlocking(context: Context): String {
-        return try {
-            val info = AdvertisingIdClient.getAdvertisingIdInfo(context)
-            info.id ?: "null"
-        } catch (e: Exception) {
-            "null"
         }
     }
 }

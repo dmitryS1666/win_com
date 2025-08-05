@@ -1,4 +1,4 @@
-package com.cyber90.events.ui
+package com.cyber90.events.ui.privacy
 
 import android.os.Bundle
 import android.view.View

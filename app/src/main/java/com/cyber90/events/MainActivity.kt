@@ -61,11 +61,11 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             val skipLoading = intent.getBooleanExtra("skip_loading", false)
-            // if (!skipLoading) {
-            //     openLoadingFragment()
-            // } else {
-            openMainFragment()
-            // }
+            if (!skipLoading) {
+                openLoadingFragment()
+            } else {
+                openMainFragment()
+            }
         }
 
         hideSystemUI()
@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragmentContainer, fragment)
-            .addToBackStack(null)
+            .addToBackStack(fragment::class.java.name)
             .commit()
     }
 

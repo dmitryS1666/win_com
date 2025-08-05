@@ -70,6 +70,12 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="unspecified" />
 
+        <activity
+            android:name=".ui.privacy.PrivacyWebViewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Cyber90Events"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />

@@ -38,7 +38,7 @@ class LoadingFragment : Fragment() {
 
                 if (progress == 100) {
                     view?.postDelayed({
-                        navigateToMainScreen()
+                        if (isAdded) navigateToMainScreen()
                     }, 500)
                 }
             }
@@ -48,7 +48,9 @@ class LoadingFragment : Fragment() {
 
     private fun navigateToMainScreen() {
         (activity as? MainActivity)?.openMainFragment()
-        parentFragmentManager.beginTransaction().remove(this).commit()
+//        parentFragmentManager.beginTransaction()
+//            .replace(R.id.mainFragmentContainer, MainFragment())
+//            .commitAllowingStateLoss()
     }
 
     override fun onDestroyView() {
