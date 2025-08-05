@@ -20,6 +20,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Win Com"
+rootProject.name = "Cyber90 Events"
 include(":app")
  

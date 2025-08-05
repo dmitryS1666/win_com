@@ -53,8 +53,8 @@
 #########################
 # 8. Точки входа
 #########################
--keep class win.com.SplashActivity { *; }
--keep class win.com.MainActivity { *; }
+-keep class com.cyber90.events.SplashActivity { *; }
+-keep class com.cyber90.events.MainActivity { *; }
 
 #########################
 # 9. Обработка исключений

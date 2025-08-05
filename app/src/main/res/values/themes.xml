@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Кастомная тема, наследующая от AppCompat -->
-    <style name="Theme.WinCom" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.Cyber90Events" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowActionBar">false</item>
@@ -9,11 +9,11 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.WinCom.Launch" parent="Theme.WinCom">
+    <style name="Theme.Cyber90Events.Launch" parent="Theme.Cyber90Events">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
     </style>
 
-    <style name="Theme.WinCom.Splash" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.Cyber90Events.Splash" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>

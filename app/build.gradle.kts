@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "win.com"
+    namespace = "com.cyber90.events"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "win.com"
+        applicationId = "com.cyber90.events"
         minSdk = 24
         targetSdk = 36
         versionCode = 3
@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.viewmodel.android)
+    implementation(libs.play.services.ads.identifier)
     kapt("androidx.room:room-compiler:2.7.2")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")

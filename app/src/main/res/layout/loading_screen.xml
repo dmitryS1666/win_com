@@ -8,7 +8,7 @@
     android:background="#000000"
     android:fitsSystemWindows="false">
 
-    <win.com.ui.LoadingCircleView
+    <com.cyber90.events.ui.LoadingCircleView
         android:id="@+id/loadingCircle"
         android:layout_width="0dp"
         android:layout_height="0dp"
