@@ -82,5 +82,5 @@ class TeamRepository(
 
     fun getParticipantsCountByTeam(): Flow<List<TeamParticipantsCount>> = teamParticipantDao.getParticipantsCountByTeam()
 
-    fun getAllParticipants(): Flow<List<TeamParticipantEntity>> = teamParticipantDao.getAllParticipants()
+    fun getAllParticipants(): Flow<List<TeamParticipantEntity>> = teamParticipantDao.getAllTeamParticipants()
 }

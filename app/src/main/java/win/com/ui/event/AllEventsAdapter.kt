@@ -61,8 +61,8 @@ class AllEventsAdapter(
                 badge.setBackgroundResource(R.drawable.badge_green)
                 badge.visibility = View.VISIBLE
             }
-            "COMPLETED" -> {
-                badge.text = "Completed"
+            "FINISHED" -> {
+                badge.text = "Finished"
                 badge.setBackgroundResource(R.drawable.badge_gray)
                 badge.visibility = View.VISIBLE
             }

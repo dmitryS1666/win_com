@@ -54,6 +54,7 @@ class LiveControlPanelFragment : Fragment() {
         repository = EventRepository(
             dao = AppDatabase.getDatabase(requireContext()).eventDao(),
             participantDao = AppDatabase.getDatabase(requireContext()).participantDao(),
+            teamParticipantDao = AppDatabase.getDatabase(requireContext()).teamParticipantDao(),
             resultDao = AppDatabase.getDatabase(requireContext()).liveResultDao()
         )
 

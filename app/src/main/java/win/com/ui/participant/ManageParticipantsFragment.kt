@@ -13,17 +13,15 @@ import win.com.MainActivity
 import win.com.R
 import win.com.data.entity.TeamEntity
 import win.com.data.entity.TeamParticipantEntity
-import win.com.ui.dashboard.DashboardFragment
 import win.com.ui.event.AllEventsFragment
-import win.com.ui.participants.ParticipantAdapter
+import win.com.ui.team.TeamParticipantAdapter
 import win.com.viewmodel.TeamViewModel
 
 class ManageParticipantsFragment : Fragment() {
 
     private lateinit var viewModel: TeamViewModel
-    private lateinit var adapter: ParticipantAdapter
+    private lateinit var adapter: TeamParticipantAdapter
 
-    private lateinit var tvTitle: TextView
     private lateinit var backButton: ImageView
     private lateinit var etName: EditText
     private lateinit var spinnerRole: Spinner
@@ -71,7 +69,7 @@ class ManageParticipantsFragment : Fragment() {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
-        adapter = ParticipantAdapter(participants) { participant ->
+        adapter = TeamParticipantAdapter(participants) { participant ->
             participants.remove(participant)
             adapter.notifyDataSetChanged()
         }

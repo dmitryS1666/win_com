@@ -36,11 +36,12 @@ class DashboardViewModel(
 
         val eventDao = db.eventDao()
         val participantDao = db.participantDao()
+        val teamParticipantDao = db.teamParticipantDao()
         val liveResultDao = db.liveResultDao()
 
         val teamDao = db.teamDao()
 
-        repository = EventRepository(eventDao, participantDao, liveResultDao)
+        repository = EventRepository(eventDao, participantDao, teamParticipantDao, liveResultDao)
 
         teams = teamDao.getAllTeams().asLiveData()
 

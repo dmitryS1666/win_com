@@ -1,6 +1,5 @@
 package win.com.data.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import win.com.data.entity.TeamParticipantEntity
@@ -26,7 +25,7 @@ interface TeamParticipantDao {
     suspend fun insertAll(participants: List<TeamParticipantEntity>)
 
     @Query("SELECT * FROM team_participants")
-    fun getAllParticipants(): Flow<List<TeamParticipantEntity>>
+    fun getAllTeamParticipants(): Flow<List<TeamParticipantEntity>>
 
     @Query("SELECT teamId, COUNT(*) as count FROM team_participants GROUP BY teamId")
     fun getParticipantsCountByTeam(): Flow<List<TeamParticipantsCount>>

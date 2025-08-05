@@ -7,10 +7,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import win.com.R
 import win.com.data.entity.EventEntity
+import win.com.data.entity.ParticipantEntity
 import win.com.data.entity.TeamParticipantEntity
 
 class ResultsAdapter(
-    private val participants: MutableList<TeamParticipantEntity>,
+    private val participants: MutableList<ParticipantEntity>,
     private val onClick: (EventEntity) -> Unit
 ) : RecyclerView.Adapter<ResultsAdapter.ResultViewHolder>() {
 
@@ -21,7 +22,7 @@ class ResultsAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateParticipants(newParticipants: List<TeamParticipantEntity>) {
+    fun updateParticipants(newParticipants: List<ParticipantEntity>) {
         participants.clear()
         participants.addAll(newParticipants)
         notifyDataSetChanged()
@@ -46,8 +47,10 @@ class ResultsAdapter(
 
         fun bind(event: EventEntity) {
             nameView.text = event.name
-            dateView.text = event.date // форматируй если нужно
-            // TODO: можно добавить количество участников (если есть)
+            dateView.text = event.date
+
+            val count = participants.count { it.id == event.id }
+            participantsView.text = "$count / ${event.maxParticipants}"
 
             itemView.setOnClickListener { onClick(event) }
         }

@@ -69,7 +69,7 @@ class TeamsManagerFragment : Fragment() {
         // Обновляем список участников
         viewModel.allParticipants.observe(viewLifecycleOwner) {
             participants = it
-            adapter.updateParticipants(it)
+            adapter.updateTeamParticipants(it)
         }
 
         createBtn.setOnClickListener {

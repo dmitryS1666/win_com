@@ -2,15 +2,18 @@ package win.com.ui.event
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
+import win.com.MainActivity
 import win.com.R
 import win.com.data.database.AppDatabase
 import win.com.data.entity.EventEntity
+import win.com.data.entity.ParticipantEntity
 import win.com.data.entity.TeamParticipantEntity
 import win.com.data.repository.EventRepository
 import win.com.ui.participants.ParticipantAdapter
@@ -22,6 +25,7 @@ class ResultDetailsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ParticipantAdapter
     private lateinit var repository: EventRepository
+    private lateinit var backButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +33,7 @@ class ResultDetailsFragment : Fragment() {
         repository = EventRepository(
             dao = AppDatabase.getDatabase(requireContext()).eventDao(),
             participantDao = AppDatabase.getDatabase(requireContext()).participantDao(),
+            teamParticipantDao = AppDatabase.getDatabase(requireContext()).teamParticipantDao(),
             resultDao = AppDatabase.getDatabase(requireContext()).liveResultDao()
         )// Инициализируй как нужно у себя
     }
@@ -42,6 +47,12 @@ class ResultDetailsFragment : Fragment() {
         titleView = view.findViewById(R.id.eventTitle)
         recyclerView = view.findViewById(R.id.participantsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        backButton = view.findViewById(R.id.backButton)
+
+        // Возврат назад
+        backButton.setOnClickListener {
+            (activity as? MainActivity)?.openFragment(AllEventsFragment())
+        }
 
         adapter = ParticipantAdapter(mutableListOf()) { participant ->
             // Если нужно, обработай удаление участника
@@ -52,7 +63,7 @@ class ResultDetailsFragment : Fragment() {
         lifecycleScope.launch {
             val event: EventEntity? = repository.getEventByIdNow(eventId)
             repository.getParticipantsByEventId(eventId).observe(viewLifecycleOwner) { participantList ->
-                adapter.updateParticipants((participantList ?: emptyList()) as List<TeamParticipantEntity>)
+                adapter.updateParticipants((participantList ?: emptyList()))
             }
             event?.let {
                 titleView.text = "${it.name} | ${it.date}"

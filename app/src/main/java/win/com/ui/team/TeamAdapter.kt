@@ -60,7 +60,7 @@ class TeamAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateParticipants(newParticipants: List<TeamParticipantEntity>) {
+    fun updateTeamParticipants(newParticipants: List<TeamParticipantEntity>) {
         participants = newParticipants
         notifyDataSetChanged()
     }

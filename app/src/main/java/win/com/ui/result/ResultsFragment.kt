@@ -5,20 +5,24 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import win.com.MainActivity
 import win.com.R
+import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.ResultDetailsFragment
 import win.com.viewmodel.ResultsViewModel
 
 class ResultsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ResultsAdapter
     private lateinit var searchInput: EditText
+    private lateinit var backButton: ImageView
     private lateinit var viewModel: ResultsViewModel
+    private lateinit var adapter: ResultsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,8 +30,10 @@ class ResultsFragment : Fragment() {
     ): View = inflater.inflate(R.layout.fragment_results, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Инициализация вью
         recyclerView = view.findViewById(R.id.resultsRecyclerView)
         searchInput = view.findViewById(R.id.searchInput)
+        backButton = view.findViewById(R.id.backButton)
 
         adapter = ResultsAdapter(mutableListOf()) { event ->
             requireActivity().supportFragmentManager.beginTransaction()
@@ -42,9 +48,15 @@ class ResultsFragment : Fragment() {
         viewModel = ViewModelProvider(this)[ResultsViewModel::class.java]
 
         viewModel.finishedEvents.observe(viewLifecycleOwner) { events ->
-            adapter.submitList(events)
+            adapter.submitList(events ?: emptyList())  // null-safe вызов
         }
 
+        // Аналогично для participants
+        viewModel.participants.observe(viewLifecycleOwner) { list ->
+            adapter.updateParticipants(list ?: emptyList())
+        }
+
+        // Поиск
         searchInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 viewModel.setFilter(s.toString())

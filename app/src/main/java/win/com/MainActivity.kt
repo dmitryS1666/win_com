@@ -23,6 +23,7 @@ import win.com.ui.event.CreateEventFragment
 import win.com.ui.event.EditEventFragment
 import win.com.ui.event.LiveControlPanelFragment
 import win.com.ui.event.ViewEventFragment
+import win.com.ui.result.ResultsFragment
 import win.com.ui.team.CreateTeamFragment
 import win.com.ui.team.EditTeamFragment
 import win.com.ui.team.TeamsManagerFragment
@@ -113,6 +114,8 @@ class MainActivity : AppCompatActivity() {
                 is ViewEventFragment -> updateNavIcons("events")
                 is EditEventFragment -> updateNavIcons("events")
                 is LiveControlPanelFragment -> updateNavIcons("events")
+
+                is ResultsFragment -> updateNavIcons("events")
 
                 is TeamsManagerFragment -> updateNavIcons("teams")
                 is CreateTeamFragment -> updateNavIcons("teams")

@@ -18,6 +18,7 @@ import win.com.data.repository.DataRepository
 import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.CreateEventFragment
 import win.com.ui.event.EditEventFragment
+import win.com.ui.result.ResultsFragment
 import win.com.ui.team.CreateTeamFragment
 import win.com.viewmodel.DashboardViewModel
 import win.com.viewmodel.DashboardViewModelFactory
@@ -106,7 +107,7 @@ class DashboardFragment : Fragment() {
         }
 
         view.findViewById<FrameLayout>(R.id.actionResults).setOnClickListener {
-            // TODO: открыть ResultsFragment
+            (activity as? MainActivity)?.openFragment(ResultsFragment())
         }
     }
 
