@@ -10,6 +10,7 @@ import win.com.data.dao.ParticipantDao
 import win.com.data.dao.TeamParticipantDao
 import win.com.data.entity.EventEntity
 import win.com.data.entity.ParticipantEntity
+import win.com.data.entity.ResultEntity
 import win.com.data.entity.TeamParticipantEntity
 
 class EventRepository(
@@ -61,8 +62,16 @@ class EventRepository(
         return dao.getFinishedEvents()
     }
 
-    suspend fun getAllTeamParticipants(): Flow<List<TeamParticipantEntity>> {
-        return teamParticipantDao.getAllTeamParticipants()
+    fun getFinishedEventById(id: Int): EventEntity? {
+        return dao.getFinishedEventById(id)
+    }
+
+    fun getResultsByEventId(eventId: Int): LiveData<List<ResultEntity>> {
+        return resultDao.getResultsByEventId(eventId)
+    }
+
+    suspend fun getResultsByEventIdNow(eventId: Int): List<ResultEntity> {
+        return resultDao.getResultsByEventIdNow(eventId)
     }
 
     suspend fun getAllParticipants(): Flow<List<ParticipantEntity>> {

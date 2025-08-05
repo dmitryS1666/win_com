@@ -1,5 +1,6 @@
 package win.com.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -7,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import win.com.data.entity.LiveResultEntity
+import win.com.data.entity.ResultEntity
 
 @Dao
 interface LiveResultDao {
@@ -25,4 +27,11 @@ interface LiveResultDao {
 
     @Query("DELETE FROM live_results WHERE eventId = :eventId")
     suspend fun deleteResultsByEvent(eventId: Int)
+
+    @Query("SELECT * FROM results WHERE eventId = :eventId ORDER BY position ASC")
+    fun getResultsByEventId(eventId: Int): LiveData<List<ResultEntity>>
+
+    // если нужен "синхронный" запрос для suspend функции
+    @Query("SELECT * FROM results WHERE eventId = :eventId ORDER BY position ASC")
+    suspend fun getResultsByEventIdNow(eventId: Int): List<ResultEntity>
 }

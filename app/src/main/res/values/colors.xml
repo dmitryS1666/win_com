@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="custom_date_picker_header_color">#1A2239</color>
     <color name="custom_date_picker_main_color">#203350</color>
+    <color name="dark_row_background">#1E2A48</color>
 </resources>

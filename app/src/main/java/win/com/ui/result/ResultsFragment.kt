@@ -1,26 +1,26 @@
 package win.com.ui.result
 
+import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import win.com.MainActivity
 import win.com.R
-import win.com.ui.event.AllEventsFragment
 import win.com.ui.event.ResultDetailsFragment
 import win.com.viewmodel.ResultsViewModel
+import java.util.Calendar
 
 class ResultsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var searchInput: EditText
     private lateinit var backButton: ImageView
+    private lateinit var filterButton: ImageView
     private lateinit var viewModel: ResultsViewModel
     private lateinit var adapter: ResultsAdapter
 
@@ -32,7 +32,6 @@ class ResultsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Инициализация вью
         recyclerView = view.findViewById(R.id.resultsRecyclerView)
-        searchInput = view.findViewById(R.id.searchInput)
         backButton = view.findViewById(R.id.backButton)
 
         adapter = ResultsAdapter(mutableListOf()) { event ->
@@ -40,6 +39,12 @@ class ResultsFragment : Fragment() {
                 .replace(R.id.mainFragmentContainer, ResultDetailsFragment.newInstance(event.id))
                 .addToBackStack(null)
                 .commit()
+        }
+
+        filterButton = view.findViewById(R.id.filterButton)
+
+        filterButton.setOnClickListener {
+            showFilterMenu(it)
         }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -55,15 +60,66 @@ class ResultsFragment : Fragment() {
         viewModel.participants.observe(viewLifecycleOwner) { list ->
             adapter.updateParticipants(list ?: emptyList())
         }
+    }
 
-        // Поиск
-        searchInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.setFilter(s.toString())
+    private fun showFilterMenu(anchor: View) {
+        val themedContext = ContextThemeWrapper(requireContext(), R.style.AppPopupMenu)
+        val popup = PopupMenu(themedContext, anchor)
+        popup.menuInflater.inflate(R.menu.filter_menu, popup.menu)
+
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.filter_by_date -> {
+                    showDatePicker()
+                    true
+                }
+                R.id.filter_by_name -> {
+                    showTextInputDialog("Enter team name") { name ->
+                        viewModel.setFilterByName(name)
+                    }
+                    true
+                }
+                R.id.filter_by_player -> {
+                    showTextInputDialog("Enter player name") { player ->
+                        viewModel.setFilterByPlayer(player)
+                    }
+                    true
+                }
+                else -> false
             }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+        }
+
+        popup.show()
+    }
+
+    private fun showTextInputDialog(hint: String, onOk: (String) -> Unit) {
+        val editText = EditText(requireContext())
+        editText.hint = hint
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(hint)
+            .setView(editText)
+            .setPositiveButton("OK") { _, _ ->
+                onOk(editText.text.toString())
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showDatePicker() {
+        val today = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            R.style.CustomDatePickerDialogTheme,
+            { _, year, month, dayOfMonth ->
+                val selectedDate = "%04d/%02d/%02d".format(year, month + 1, dayOfMonth)
+                viewModel.setFilterByDate(selectedDate)
+            },
+            today.get(Calendar.YEAR),
+            today.get(Calendar.MONTH),
+            today.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
     }
 
     companion object {

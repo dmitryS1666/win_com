@@ -35,4 +35,7 @@ interface EventDao {
 
     @Query("SELECT * FROM events WHERE status = 'FINISHED' ORDER BY date DESC, time DESC")
     fun getFinishedEvents(): LiveData<List<EventEntity>>
+
+    @Query("SELECT * FROM events WHERE id = :id LIMIT 1")
+    fun getFinishedEventById(id: Int): EventEntity?
 }

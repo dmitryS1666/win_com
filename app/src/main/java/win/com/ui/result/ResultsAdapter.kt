@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import win.com.R
 import win.com.data.entity.EventEntity
 import win.com.data.entity.ParticipantEntity
+import win.com.data.entity.ResultEntity
 import win.com.data.entity.TeamParticipantEntity
 
 class ResultsAdapter(
@@ -16,6 +17,7 @@ class ResultsAdapter(
 ) : RecyclerView.Adapter<ResultsAdapter.ResultViewHolder>() {
 
     private var events: List<EventEntity> = emptyList()
+    private var results: List<ResultEntity> = emptyList()
 
     fun submitList(list: List<EventEntity>) {
         events = list
@@ -25,6 +27,11 @@ class ResultsAdapter(
     fun updateParticipants(newParticipants: List<ParticipantEntity>) {
         participants.clear()
         participants.addAll(newParticipants)
+        notifyDataSetChanged()
+    }
+
+    fun updateResults(newResults: List<ResultEntity>) {
+        results = newResults
         notifyDataSetChanged()
     }
 
@@ -43,16 +50,25 @@ class ResultsAdapter(
     inner class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nameView = itemView.findViewById<TextView>(R.id.eventName)
         private val dateView = itemView.findViewById<TextView>(R.id.eventDate)
+        private val placeView = itemView.findViewById<TextView>(R.id.place)
         private val participantsView = itemView.findViewById<TextView>(R.id.participantsCount)
+        private val viewIcon = itemView.findViewById<TextView>(R.id.viewIcon)
 
         fun bind(event: EventEntity) {
             nameView.text = event.name
             dateView.text = event.date
 
-            val count = participants.count { it.id == event.id }
+            val winnerName =
+                participants.find { it.eventId == event.id && it.pos == "1" }?.nickname
+
+            placeView.text = winnerName ?: "No winner"
+
+            val count = participants.count { it.eventId == event.id }
             participantsView.text = "$count / ${event.maxParticipants}"
 
-            itemView.setOnClickListener { onClick(event) }
+            viewIcon.setOnClickListener {
+                onClick(event) // 👈 теперь переход только по клику на иконку
+            }
         }
     }
 }

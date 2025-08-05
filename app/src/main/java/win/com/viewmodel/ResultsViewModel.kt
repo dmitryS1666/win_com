@@ -25,24 +25,40 @@ class ResultsViewModel(application: Application) : AndroidViewModel(application)
     private val _participants = MutableLiveData<List<ParticipantEntity>>()
     val participants: LiveData<List<ParticipantEntity>> = _participants
 
+    private val _filterType = MutableLiveData<String>("")
+    private val _filterQuery = MutableLiveData<String>("")
+
     val finishedEvents: LiveData<List<EventEntity>> = MediatorLiveData<List<EventEntity>>().apply {
-        var currentEvents: List<EventEntity>? = null
-        var currentFilter = ""
+        var events: List<EventEntity>? = null
+        var type = ""
+        var query = ""
 
         fun update() {
-            value = currentEvents?.filter {
-                it.name.contains(currentFilter, ignoreCase = true)
-                // Можно фильтровать по дате и участникам, если нужно
+            value = events?.filter { event ->
+                when (type) {
+                    "name" -> event.name.contains(query, true)
+                    "player" -> participants.value?.any {
+                        it.eventId == event.id && it.nickname.contains(query, true)
+                    } == true
+                    "date" -> event.date == query
+                    else -> true
+                }
             }
         }
 
         addSource(_allEvents) {
-            currentEvents = it
+            events = it
             update()
         }
-
-        addSource(_filter) {
-            currentFilter = it ?: ""
+        addSource(_filterType) {
+            type = it ?: ""
+            update()
+        }
+        addSource(_filterQuery) {
+            query = it ?: ""
+            update()
+        }
+        addSource(participants) {
             update()
         }
     }
@@ -60,5 +76,20 @@ class ResultsViewModel(application: Application) : AndroidViewModel(application)
 
     fun setFilter(filter: String) {
         _filter.value = filter
+    }
+
+    fun setFilterByName(name: String) {
+        _filterType.value = "name"
+        _filterQuery.value = name
+    }
+
+    fun setFilterByPlayer(player: String) {
+        _filterType.value = "player"
+        _filterQuery.value = player
+    }
+
+    fun setFilterByDate(date: String) {
+        _filterType.value = "date"
+        _filterQuery.value = date
     }
 }

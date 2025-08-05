@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="AppPopupMenu" parent="ThemeOverlay.AppCompat.Light">
+        <item name="popupMenuStyle">@style/CustomPopupMenuStyle</item>
+    </style>
+
+    <style name="CustomPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/menu_background</item>
+    </style>
+
     <style name="CustomDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- Цвет тулбара (шапки) -->
         <item name="colorPrimary">@color/custom_date_picker_header_color</item>
