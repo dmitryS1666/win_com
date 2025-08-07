@@ -220,7 +220,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openMainFragment() {
-        hideBottomNav()
         val fragment = WelcomeFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragmentContainer, fragment)

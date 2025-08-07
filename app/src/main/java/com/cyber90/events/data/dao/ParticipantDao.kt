@@ -38,6 +38,9 @@ interface ParticipantDao {
 
     @Query("UPDATE participants SET pos = :pos WHERE eventId = :eventId AND nickname = :name")
     suspend fun updatePosition(eventId: Int, name: String, pos: String)
+
+    @Query("SELECT * FROM participants WHERE eventId = :eventId")
+    suspend fun getParticipantsForEventOnce(eventId: Int): List<ParticipantEntity>
 }
 
 data class EventParticipantCount(

@@ -134,6 +134,13 @@ class ViewEventFragment : Fragment() {
 
         startEventButton.setOnClickListener {
             lifecycleScope.launch {
+                val participants = viewModel.getParticipantsByEventIdOnce(eventId)
+
+                if (participants.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "To start the event, you must add participants", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
                 val ongoingEvent = viewModel.getEventByIdOnce(eventId)
                 if (ongoingEvent != null) {
                     val updatedEvent = ongoingEvent.copy(status = "ONGOING")

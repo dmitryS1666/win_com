@@ -24,6 +24,7 @@ class AllEventsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AllEventsAdapter
     private var participantCounts: Map<Int, Int> = emptyMap()
+    private lateinit var emptyView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +37,7 @@ class AllEventsFragment : Fragment() {
         val application = requireActivity().application
         val db = AppDatabase.getDatabase(application)
         val dataRepository = DataRepository(db.eventDao(), db.participantDao(), db.teamParticipantDao(), db.teamDao())
+        emptyView = view.findViewById(R.id.emptyView)
 
         val factory = DashboardViewModelFactory(application, dataRepository)
         viewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
@@ -78,6 +80,14 @@ class AllEventsFragment : Fragment() {
 
         viewModel.allEvents.observe(viewLifecycleOwner) { events ->
             adapter.submitList(events)
+
+            if (events.isNullOrEmpty()) {
+                emptyView.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            } else {
+                emptyView.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }
         }
     }
 }

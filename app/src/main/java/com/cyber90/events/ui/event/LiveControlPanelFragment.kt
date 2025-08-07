@@ -136,10 +136,6 @@ class LiveControlPanelFragment : Fragment() {
             val bitmap = view.findViewById<LinearLayout>(R.id.livePanelRoot).drawToBitmap()
             saveBitmapToGallery(bitmap)
         }
-
-        view.findViewById<Button>(R.id.buttonExportResults).setOnClickListener {
-            Toast.makeText(requireContext(), "PDF export is not implemented yet", Toast.LENGTH_SHORT).show()
-        }
     }
 
     @SuppressLint("DefaultLocale")

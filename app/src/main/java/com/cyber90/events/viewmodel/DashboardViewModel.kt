@@ -100,4 +100,8 @@ class DashboardViewModel(
             repository.getEventByIdNow(id)
         }
     }
+
+    suspend fun getParticipantsByEventIdOnce(eventId: Int): List<ParticipantEntity> {
+        return repository.getParticipantsByEventIdOnce(eventId)
+    }
 }

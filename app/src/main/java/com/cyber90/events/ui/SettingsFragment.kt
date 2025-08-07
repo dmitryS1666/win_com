@@ -100,25 +100,6 @@ class SettingsFragment : Fragment() {
             startActivity(intent)
         }
 
-        val supportLink = TextView(requireContext()).apply {
-            text = "Customer Support"
-            setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_light))
-            textSize = 16f
-            setPadding(0, 12, 0, 12)
-            isClickable = true
-            isFocusable = true
-        }
-
-        supportLink.setOnClickListener {
-            val supportUrl = "https://cyber90.xyz/support/"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(supportUrl))
-            startActivity(intent)
-        }
-
-// Добавь элемент в разметку программно
-        val settingsBody = view.findViewById<LinearLayout>(R.id.settingsBody)
-        settingsBody.addView(supportLink)
-
         backButton.setOnClickListener {
             requireActivity().onBackPressed()
         }

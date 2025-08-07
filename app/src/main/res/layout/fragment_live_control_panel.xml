@@ -172,17 +172,6 @@
                 android:textColor="@android:color/white"
                 android:drawableStart="@drawable/ic_photo" />
 
-            <Button
-                android:id="@+id/buttonExportResults"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button_bg"
-                android:backgroundTint="#03A9F4"
-                android:text="Export Results"
-                android:paddingLeft="15dp"
-                android:textColor="@android:color/white"
-                android:drawableStart="@drawable/ic_export" />
         </LinearLayout>
     </LinearLayout>
 

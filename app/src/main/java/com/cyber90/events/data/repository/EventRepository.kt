@@ -70,8 +70,8 @@ class EventRepository(
         return resultDao.getResultsByEventId(eventId)
     }
 
-    suspend fun getResultsByEventIdNow(eventId: Int): List<ResultEntity> {
-        return resultDao.getResultsByEventIdNow(eventId)
+    suspend fun getParticipantsByEventIdOnce(eventId: Int): List<ParticipantEntity> {
+        return participantDao.getParticipantsForEventOnce(eventId)
     }
 
     suspend fun getAllParticipants(): Flow<List<ParticipantEntity>> {
