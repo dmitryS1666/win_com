@@ -46,7 +46,7 @@ class ViewTeamFragment : Fragment() {
         }
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
+            requireActivity().onBackPressed()
         }
 
         viewModel.getTeamById(teamId).observe(viewLifecycleOwner) { team ->

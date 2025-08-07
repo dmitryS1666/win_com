@@ -75,7 +75,7 @@ class EditTeamFragment : Fragment() {
         addParticipantButton = view.findViewById(R.id.buttonAddParticipant)
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
+            requireActivity().onBackPressed()
         }
 
         setupRoleSpinner()

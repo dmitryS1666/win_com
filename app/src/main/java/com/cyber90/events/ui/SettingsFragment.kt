@@ -120,7 +120,7 @@ class SettingsFragment : Fragment() {
         settingsBody.addView(supportLink)
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(DashboardFragment())
+            requireActivity().onBackPressed()
         }
     }
 

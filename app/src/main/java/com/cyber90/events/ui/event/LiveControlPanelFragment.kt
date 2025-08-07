@@ -60,7 +60,7 @@ class LiveControlPanelFragment : Fragment() {
 
         val backButton = view.findViewById<ImageView>(R.id.backButton)
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(AllEventsFragment())
+            requireActivity().onBackPressed()
         }
 
         repository.getById(eventId).observe(viewLifecycleOwner) { event ->

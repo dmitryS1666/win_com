@@ -53,7 +53,7 @@ class ResultDetailsFragment : Fragment() {
         backButton = view.findViewById(R.id.backButton)
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(ResultsFragment())
+            requireActivity().onBackPressed()
         }
 
         resultAdapter = ParticipantResultAdapter(emptyList(), emptyList())

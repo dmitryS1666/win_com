@@ -1,5 +1,6 @@
 package com.cyber90.events.ui.dashboard
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,14 +35,24 @@ class DashboardFragment : Fragment() {
     )
     private lateinit var sliderDots: LinearLayout
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): android.view.View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): android.view.View {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: android.view.View, savedInstanceState: Bundle?) {
         val application = requireActivity().application
         val db = AppDatabase.getDatabase(application)
-        val dataRepository = DataRepository(db.eventDao(), db.participantDao(), db.teamParticipantDao(), db.teamDao())
+        val dataRepository = DataRepository(
+            db.eventDao(),
+            db.participantDao(),
+            db.teamParticipantDao(),
+            db.teamDao()
+        )
 
         val factory = DashboardViewModelFactory(application, dataRepository)
         viewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
@@ -58,35 +69,42 @@ class DashboardFragment : Fragment() {
         })
 
         viewModel.lastEvent.observe(viewLifecycleOwner) { event ->
+            val manageButton = view.findViewById<Button>(R.id.manageEventButton)
+
             if (event != null) {
                 val eventTitle = "🏁 ${event.name}"
                 val eventInfoDate = "📅 ${event.date}"
 
                 // Получаем участников
-                viewModel.getParticipantsForEvent(event.id).observe(viewLifecycleOwner) { participants ->
-                    val count = participants.size
-                    val max = event.maxParticipants
-                    val eventInfoPart = "👥 $count / $max"
+                viewModel.getParticipantsForEvent(event.id)
+                    .observe(viewLifecycleOwner) { participants ->
+                        val count = participants.size
+                        val max = event.maxParticipants
+                        val eventInfoPart = "👥 $count / $max"
 
-                    view.findViewById<TextView>(R.id.eventInfoPart).text = eventInfoPart
-                }
+                        view.findViewById<TextView>(R.id.eventInfoPart).text = eventInfoPart
+                    }
 
                 view.findViewById<TextView>(R.id.eventTitle).text = eventTitle
                 view.findViewById<TextView>(R.id.eventInfoDate).text = eventInfoDate
 
-                view.findViewById<Button>(R.id.manageEventButton).setOnClickListener {
+
+                manageButton.setOnClickListener {
                     val fragment = EditEventFragment().apply {
                         arguments = Bundle().apply {
-                            putInt("event_id", event.id)  // передаем ID события
+                            putInt("event_id", event.id)
                         }
                     }
                     (activity as? MainActivity)?.openFragment(fragment)
                 }
-
             } else {
-                view.findViewById<TextView>(R.id.eventTitle).text = "🏁 Нет события"
-                view.findViewById<TextView>(R.id.eventInfoDate).text = "Empty data"
-                view.findViewById<TextView>(R.id.eventInfoPart).text = "Empty data"
+                view.findViewById<TextView>(R.id.eventTitle).text = "🏁 Create new Event"
+                view.findViewById<TextView>(R.id.eventInfoPart).visibility = View.GONE
+                view.findViewById<TextView>(R.id.eventInfoDate).visibility = View.GONE
+
+                manageButton.setOnClickListener {
+                    (activity as? MainActivity)?.openFragment(CreateEventFragment())
+                }
             }
         }
 

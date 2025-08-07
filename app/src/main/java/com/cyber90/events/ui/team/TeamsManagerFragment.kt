@@ -47,7 +47,7 @@ class TeamsManagerFragment : Fragment() {
         val backButton = view.findViewById<ImageView>(R.id.backButton)
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(DashboardFragment())
+            requireActivity().onBackPressed()
         }
 
         adapter = TeamAdapter(

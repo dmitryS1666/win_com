@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +15,6 @@ import com.cyber90.events.MainActivity
 import com.cyber90.events.R
 import com.cyber90.events.data.database.AppDatabase
 import com.cyber90.events.data.repository.DataRepository
-import com.cyber90.events.ui.dashboard.DashboardFragment
 import com.cyber90.events.viewmodel.DashboardViewModel
 import com.cyber90.events.viewmodel.DashboardViewModelFactory
 
@@ -44,7 +44,7 @@ class AllEventsFragment : Fragment() {
 
         // Возврат назад
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(DashboardFragment())
+            requireActivity().onBackPressed()
         }
 
         viewModel.participantCountsByEvent.observe(viewLifecycleOwner) { map ->

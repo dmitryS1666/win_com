@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ class ResultsFragment : Fragment() {
     private lateinit var filterButton: ImageView
     private lateinit var viewModel: ResultsViewModel
     private lateinit var adapter: ResultsAdapter
+    private lateinit var emptyView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,12 +35,17 @@ class ResultsFragment : Fragment() {
         // Инициализация вью
         recyclerView = view.findViewById(R.id.resultsRecyclerView)
         backButton = view.findViewById(R.id.backButton)
+        emptyView = view.findViewById(R.id.emptyView)
 
         adapter = ResultsAdapter(mutableListOf()) { event ->
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.mainFragmentContainer, ResultDetailsFragment.newInstance(event.id))
                 .addToBackStack(null)
                 .commit()
+        }
+
+        backButton.setOnClickListener {
+            requireActivity().onBackPressed()
         }
 
         filterButton = view.findViewById(R.id.filterButton)
@@ -54,6 +61,14 @@ class ResultsFragment : Fragment() {
 
         viewModel.finishedEvents.observe(viewLifecycleOwner) { events ->
             adapter.submitList(events ?: emptyList())  // null-safe вызов
+
+            if (events.isNullOrEmpty()) {
+                emptyView.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            } else {
+                emptyView.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }
         }
 
         // Аналогично для participants

@@ -152,7 +152,6 @@ class MainActivity : AppCompatActivity() {
 
     fun openFragment(fragment: Fragment) {
         // Здесь подумайте, действительно ли нужно очищать весь backstack?
-        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragmentContainer, fragment)
             .addToBackStack(fragment::class.java.name)

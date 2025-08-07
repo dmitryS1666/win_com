@@ -75,7 +75,7 @@ class EditEventFragment : Fragment() {
         modeSpinner.adapter = modeAdapter
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(AllEventsFragment())
+            requireActivity().onBackPressed()
         }
 
         viewModel.getParticipantsByEventId(eventId).observe(viewLifecycleOwner) { list ->

@@ -42,7 +42,7 @@ class CreateTeamFragment : Fragment() {
         backButton = view.findViewById(R.id.backButton)
 
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(TeamsManagerFragment())
+            requireActivity().onBackPressed()
         }
 
         setupSpinners()

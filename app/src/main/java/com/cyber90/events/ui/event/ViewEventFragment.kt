@@ -64,7 +64,7 @@ class ViewEventFragment : Fragment() {
 
         // Назад
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(AllEventsFragment())
+            requireActivity().onBackPressed()
         }
 
         // Редактирование (кнопка или иконка)

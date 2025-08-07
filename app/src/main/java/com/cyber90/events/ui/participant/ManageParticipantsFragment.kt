@@ -57,7 +57,7 @@ class ManageParticipantsFragment : Fragment() {
 
     private fun setupUI() {
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(AllEventsFragment())
+            requireActivity().onBackPressed()
         }
 
         val roles = listOf("PILOT", "NAVIGATOR", "ENGINEER")

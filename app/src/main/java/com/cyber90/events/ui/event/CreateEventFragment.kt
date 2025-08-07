@@ -56,7 +56,7 @@ class CreateEventFragment : Fragment() {
 
         // Возврат назад
         backButton.setOnClickListener {
-            (activity as? MainActivity)?.openFragment(AllEventsFragment())
+            requireActivity().onBackPressed()
         }
 
         context?.let { ctx ->
